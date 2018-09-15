@@ -2,9 +2,8 @@ const SECRETS = require('../secrets');
 const LoginFlow = require("./shared-login-flow");
 const moment = require("moment");
 const colors = require("colors");
-const { wait, prompt } = require("../utils/helpers");
+const { prompt } = require("../utils/helpers");
 
-// CSS Query to locate the link to navigate to each account page
 const ANZ = ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(6)";
 const BNZ = ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(3)";
 const Kiwibank = ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(1)";
@@ -57,6 +56,9 @@ class YNABFlow {
         const mostRecentTransactionUSDate = await page.evaluate(
             el => el.innerText.trim(), transactionDateElements[0]
         );
+
+        console.log(`    found YNAB most recent transaction date ${mostRecentTransactionUSDate}`.green);
+
         const mostRecentTransactionMoment = moment(mostRecentTransactionUSDate, "MM-DD-YYYY");
 
         return mostRecentTransactionMoment;
@@ -66,8 +68,7 @@ class YNABFlow {
         await page.waitForSelector(ynabAccount);
         await page.click(ynabAccount);
         await page.click(SELECTORS.import.startImportButton);
-        await wait(SELECTORS.import.animationDelay);
-
+        await page.waitForSelector(SELECTORS.import.choseImportFile);
         const elementHandle = await page.$(SELECTORS.import.choseImportFile);
         await elementHandle.uploadFile(fileName);
 

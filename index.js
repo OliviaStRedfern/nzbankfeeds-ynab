@@ -9,7 +9,7 @@ async function main(BankFlow) {
     const ynab = new YNABFlow();
     const bank = new BankFlow();
     const account = BankFlow.accountName;
-    const pageBank = await launchBrowser(250);
+    const pageBank = await launchBrowser();
     const pageYNAB = await launchBrowser();
 
     const todayMoment = moment();

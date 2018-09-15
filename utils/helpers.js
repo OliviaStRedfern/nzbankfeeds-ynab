@@ -32,7 +32,7 @@ async function isSelectorVisible(page, selector) {
 }
 
 async function overwriteDateField(page, selector, mmmoment, dateFormat) {
-    console.log(`invoked overwriteDateField`);
+    console.log(`invoked helpers.overwriteDateField`.dim);
 
     const date = mmmoment.format(dateFormat);
 
@@ -45,7 +45,7 @@ async function overwriteDateField(page, selector, mmmoment, dateFormat) {
     await elementHandle.press('Backspace');
     await elementHandle.type(date, 1000);
 
-    console.log(`    typed ${date}`);
+    console.log(`    typed ${date}`.green);
 }
 
 module.exports = { prompt, wait, isSelectorVisible, overwriteDateField };
