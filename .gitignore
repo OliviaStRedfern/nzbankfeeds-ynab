@@ -1,0 +1,8 @@
+node_modules
+build
+npm-debug.log
+secrets.js
+.env
+.DS_Store
+
+*.code-workspace
