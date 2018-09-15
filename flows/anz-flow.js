@@ -83,7 +83,7 @@ class ANZFlow extends BankFlow {
 
     async fillDateField(page, selector, mmmoment) {
         this.log("invoked ANZFlow::fillDateField");
-        overwriteDateField(page, selector, mmmoment, DATE_FORMAT);
+        await overwriteDateField(page, selector, mmmoment, DATE_FORMAT);
     }
 
 }

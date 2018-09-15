@@ -45,7 +45,7 @@ async function overwriteDateField(page, selector, mmmoment, dateFormat) {
     await elementHandle.press('Backspace');
     await elementHandle.type(date, 1000);
 
-    console.log(`     typed ${date}`);
+    console.log(`    typed ${date}`);
 }
 
 module.exports = { prompt, wait, isSelectorVisible, overwriteDateField };
