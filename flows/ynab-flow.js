@@ -20,7 +20,7 @@ const KiwibankCC = {
     selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(5)"
 }
 const ANZ = {
-    selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(6)"
+    selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(7)"
 }
 
 const ynabAccounts = {
@@ -42,6 +42,8 @@ const SELECTORS = {
         startImportButton: "button.accounts-toolbar-file-import-transactions",
         animationDelay: 200,
         choseImportFile: "input[type=file]",
+        confirmImport: ".modal .button-primary",
+        ok: ".modal .button-primary",
     },
 };
 
@@ -95,7 +97,13 @@ class YNABFlow {
 
         await elementHandle.uploadFile(fileName);
 
-        await prompt('Confirm the import in Chromium');
+        await page.waitForSelector(SELECTORS.import.confirmImport);
+        await page.click(SELECTORS.import.confirmImport);
+
+        await page.waitForSelector(SELECTORS.import.ok);
+        await page.click(SELECTORS.import.ok);
+
+        this.log('    import complete');
     }
     async gotoHome(page) {
         await page.goto(URLS.home);
