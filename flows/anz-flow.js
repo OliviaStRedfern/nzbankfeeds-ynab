@@ -14,7 +14,7 @@ class ANZFlow extends AbstractBankFlow {
         this.URL = "https://secure.anz.co.nz/IBCS/service/home";
         this.SELECTORS = {
             login: {
-                customerNumberField: "#user-id",
+                userIDField: "#user-id",
                 passwordField: "#password",
                 loginButton: "#submit",
             },

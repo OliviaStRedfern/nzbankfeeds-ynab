@@ -44,7 +44,8 @@ async function overwriteDateField(page, selector, mmmoment, dateFormat) {
     await elementHandle.click({ clickCount: 3 });
     await elementHandle.press('Backspace');
     await elementHandle.type(date, 1000);
-
+    await elementHandle.press('Escape');
+    
     console.log(`    typed ${date}`.green);
 }
 

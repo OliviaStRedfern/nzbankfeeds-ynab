@@ -4,21 +4,24 @@ const moment = require("moment");
 const colors = require("colors");
 const { prompt } = require("../utils/helpers");
 
-const ANZ = {
-    selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(6)"
+const Kiwibank = {
+    selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(1)"
+}
+const Westpac = {
+    selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(2)"
 }
 const BNZ = {
     selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(3)"
 }
-const Kiwibank = {
-    selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(1)"
-}
 const KiwibankCC = {
     selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(5)"
 }
+const ANZ = {
+    selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(6)"
+}
 
 const ynabAccounts = {
-    ANZ, BNZ, Kiwibank, KiwibankCC
+    ANZ, BNZ, Kiwibank, KiwibankCC, Westpac
 }
 
 const URLS = {

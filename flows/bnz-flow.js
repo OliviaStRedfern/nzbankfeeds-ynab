@@ -17,7 +17,7 @@ class BNZFlow extends AbstractBankFlow {
         this.HOME = "https://www.bnz.co.nz/client/";
         this.SELECTORS = {
             login: {
-                customerNumberField: "#field-principal",
+                userIDField: "#field-principal",
                 passwordField: "#field-credentials",
                 loginButton: "form button",
             },

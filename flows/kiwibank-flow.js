@@ -20,7 +20,7 @@ class KiwibankFlow extends AbstractBankFlow {
         this.URL = "https://www.ib.kiwibank.co.nz/accounts/";
         this.SELECTORS = {
             login: {
-                customerNumberField: "#ctl00_c_txtUserName",
+                userIDField: "#ctl00_c_txtUserName",
                 passwordField: "#ctl00_c_txtPassword",
                 loginButton: ".submit_button input",
             },
