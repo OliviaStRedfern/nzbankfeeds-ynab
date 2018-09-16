@@ -13,9 +13,12 @@ const BNZ = {
 const Kiwibank = {
     selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(1)"
 }
+const KiwibankCC = {
+    selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(5)"
+}
 
 const ynabAccounts = {
-    ANZ, BNZ, Kiwibank
+    ANZ, BNZ, Kiwibank, KiwibankCC
 }
 
 const URLS = {

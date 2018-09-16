@@ -93,6 +93,10 @@ class AbstractBankFlow {
         this.log("invoked AbstractBankFlow::fillDateField");
     }
 
+    getAccountSelector() {
+        this.log("invoked AbstractBankFlow::getAccountSelector");
+    }
+
     async logout(page) {
         this.log("invoked AbstractBankFlow::logout");
         this.log("    didn't logout: not implemented");

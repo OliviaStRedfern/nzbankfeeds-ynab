@@ -101,5 +101,4 @@ class BNZFlow extends AbstractBankFlow {
 
 }
 
-BNZFlow.accountName = "BNZ";
 module.exports = BNZFlow;
