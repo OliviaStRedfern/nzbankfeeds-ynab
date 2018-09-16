@@ -1,63 +1,56 @@
 const { prompt, isSelectorVisible } = require('../utils/helpers');
 const SECRETS = require('../secrets');
-const LoginFlow = require("./shared-login-flow");
 const moment = require("moment");
-const csvConverter = require("../convertCSV/bnz2ynab");
-const BankFlow = require("./bank-flow");
+const csvConvert = require("../convertCSV/bnz2ynab");
+const AbstractBankFlow = require("./abstract-bank-flow");
+const { ynabAccounts } = require("./ynab-flow")
 
-const URL = "https://secure.bnz.co.nz/auth/personal-login";
-const DATE_FORMAT = "DD/MM/YYYY";
-
-
-
-const SELECTORS = {
-    login: {
-        customerNumberField: "#field-principal",
-        passwordField: "#field-credentials",
-        loginButton: "form button",
-    },
-    onlineCode: {
-        onlineCodeField: "#online-code",
-        verifyButton: "#verify",
-    },
-    accounts: {
-        closePromo: ".intercom-note-close",
-        cc: "CreditCardDetailsView",
-        getSelectorForAccount(accountType) {
-            return `.transactions-panel .${accountType}`
-        }
-    },
-    export: {
-        link: "button.js-export",
-        selectFormatOpen: "input#ComboboxInput-export-format",
-        selectFormatCSV: "a[href=\\#CSV]",
-        startDateField: "input#fromDate",
-        endDateField: "input#toDate",
-        exportButton: "button.js-submit",
-    },
-    logout: {
-        menu: "button.MenuButton",
-        logoutButton: "button.js-main-menu-logout",
-    }
-}
-
-class BNZFlow extends BankFlow {
+class BNZFlow extends AbstractBankFlow {
 
     constructor() {
         super();
         this.log("BNZFlow object created");
-
+        this.ynabAccount = ynabAccounts.BNZ;
+        this.csvConvert = csvConvert;
+        this.SECRETS = SECRETS.BNZFlow;
+        this.URL = "https://secure.bnz.co.nz/auth/personal-login";
+        this.HOME = "https://www.bnz.co.nz/client/";
+        this.SELECTORS = {
+            login: {
+                customerNumberField: "#field-principal",
+                passwordField: "#field-credentials",
+                loginButton: "form button",
+            },
+            onlineCode: {
+                onlineCodeField: "#online-code",
+                verifyButton: "#verify",
+            },
+            accounts: {
+                closePromo: ".intercom-note-close",
+                cc: "CreditCardDetailsView",
+                getSelectorForAccount(accountType) {
+                    return `.transactions-panel .${accountType}`
+                }
+            },
+            export: {
+                link: "button.js-export",
+                selectFormatOpen: "input#ComboboxInput-export-format",
+                selectFormatCSV: "a[href=\\#CSV]",
+                startDateField: "input#fromDate",
+                endDateField: "input#toDate",
+                exportButton: "button.js-submit",
+            },
+            logout: {
+                menu: "button.MenuButton",
+                logoutButton: "button.js-main-menu-logout",
+            }
+        }
     }
 
     async login(page) {
         this.log("invoked BNZFlow::login");
 
-        const loginFlow = new LoginFlow(
-            URL,
-            SELECTORS.login.customerNumberField,
-            SELECTORS.login.passwordField,
-            SELECTORS.login.loginButton);
-        await loginFlow.login(page, SECRETS.bnz.customerNumber, SECRETS.bnz.password);
+        super.login(page);
 
         await prompt('Authorise your login using your device, then press enter');
     }
@@ -65,27 +58,27 @@ class BNZFlow extends BankFlow {
     async navigateToExportTransactions(page) {
         this.log("invoked BNZFlow::navigateToExportTransactions");
 
-        if (await isSelectorVisible(page, SELECTORS.accounts.closePromo)) {
-            await page.click(SELECTORS.accounts.closePromo);
+        if (await isSelectorVisible(page, this.SELECTORS.accounts.closePromo)) {
+            await page.click(this.SELECTORS.accounts.closePromo);
         }
 
-        await page.waitForSelector(SELECTORS.accounts.getSelectorForAccount(SELECTORS.accounts.cc));
+        await page.waitForSelector(this.SELECTORS.accounts.getSelectorForAccount(this.SELECTORS.accounts.cc));
 
-        await page.click(SELECTORS.export.link);
+        await page.click(this.SELECTORS.export.link);
 
-        await page.waitForSelector(SELECTORS.export.selectFormatOpen);
-        await page.click(SELECTORS.export.selectFormatOpen);
-        await page.click(SELECTORS.export.selectFormatCSV);
+        await page.waitForSelector(this.SELECTORS.export.selectFormatOpen);
+        await page.click(this.SELECTORS.export.selectFormatOpen);
+        await page.click(this.SELECTORS.export.selectFormatCSV);
 
     }
 
     async downloadTransactions(page, startMoment, endMoment) {
         this.log(`invoked BNZFlow::downloadTransactions`);
 
-        await this.fillDateField(page, SELECTORS.export.startDateField, startMoment);
-        await this.fillDateField(page, SELECTORS.export.endDateField, endMoment);
+        await this.fillDateField(page, this.SELECTORS.export.startDateField, startMoment);
+        await this.fillDateField(page, this.SELECTORS.export.endDateField, endMoment);
 
-        return super.downloadCSV(page, SELECTORS.export.exportButton);
+        return super.downloadCSV(page, this.SELECTORS.export.exportButton);
     }
 
     async fillDateField(page, selector, mmmoment) {
@@ -97,7 +90,7 @@ class BNZFlow extends BankFlow {
         mmmoment.subtract(1, 'days');
        }
 
-       const date = mmmoment.format(DATE_FORMAT);
+       const date = mmmoment.format(this.DATE_FORMAT);
 
        await page.click(selector);
        await page.keyboard.type(date);
@@ -108,6 +101,5 @@ class BNZFlow extends BankFlow {
 
 }
 
-BNZFlow.convertCSV = csvConverter;
 BNZFlow.accountName = "BNZ";
 module.exports = BNZFlow;

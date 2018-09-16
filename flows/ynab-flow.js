@@ -4,9 +4,19 @@ const moment = require("moment");
 const colors = require("colors");
 const { prompt } = require("../utils/helpers");
 
-const ANZ = ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(6)";
-const BNZ = ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(3)";
-const Kiwibank = ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(1)";
+const ANZ = {
+    selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(6)"
+}
+const BNZ = {
+    selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(3)"
+}
+const Kiwibank = {
+    selector: ".nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(1)"
+}
+
+const ynabAccounts = {
+    ANZ, BNZ, Kiwibank
+}
 
 const URLS = {
     login: "https://app.youneedabudget.com/users/login",
@@ -51,7 +61,7 @@ class YNABFlow {
         this.log("invoked YNABFlow::getMostRecentTransactionDate");
 
         await this.login(page);
-        await page.click(ynabAccount);
+        await page.click(ynabAccount.selector);
         const transactionDateElements = await page.$$(SELECTORS.import.transactionDates);
         const mostRecentTransactionUSDate = await page.evaluate(
             el => el.innerText.trim(), transactionDateElements[0]
@@ -65,11 +75,15 @@ class YNABFlow {
     }
 
     async uploadCSV(page, ynabAccount, fileName) {
-        await page.waitForSelector(ynabAccount);
-        await page.click(ynabAccount);
+        this.log("invoked YNABFlow::uploadCSV");
+        this.log(`    file: ${fileName}`);
+
+        await page.waitForSelector(ynabAccount.selector);
+        await page.click(ynabAccount.selector);
         await page.click(SELECTORS.import.startImportButton);
         await page.waitForSelector(SELECTORS.import.choseImportFile);
         const elementHandle = await page.$(SELECTORS.import.choseImportFile);
+
         await elementHandle.uploadFile(fileName);
 
         await prompt('Confirm the import in Chromium');
@@ -79,5 +93,4 @@ class YNABFlow {
     }
 }
 
-YNABFlow.accounts = {ANZ, BNZ, Kiwibank};
-module.exports = YNABFlow;
+module.exports = { YNABFlow, ynabAccounts };

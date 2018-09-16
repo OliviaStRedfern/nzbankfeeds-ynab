@@ -1,7 +1,7 @@
 const ANZFlow = require("./flows/anz-flow");
 const BNZFlow = require("./flows/bnz-flow");
 const KiwibankFlow = require("./flows/kiwibank-flow");
-const YNABFlow = require("./flows/ynab-flow");
+const { YNABFlow } = require("./flows/ynab-flow");
 const moment = require("moment");
 const launchBrowser = require("./utils/launch-browser");
 
@@ -14,16 +14,16 @@ async function main(BankFlow) {
 
     const todayMoment = moment();
     const mostRecentTransactionMoment =
-        await ynab.getMostRecentTransactionMoment(pageYNAB, YNABFlow.accounts[account]);
+        await ynab.getMostRecentTransactionMoment(pageYNAB, bank.ynabAccount);
     const fileName = await bank.getCSV(pageBank, mostRecentTransactionMoment, todayMoment);
-    BankFlow.convertCSV(fileName);
+    const ynabCSV = await bank.csvConvert(fileName);
     await bank.logout(pageBank);
 
     await ynab.gotoHome(pageYNAB);
-    await ynab.uploadCSV(pageYNAB, YNABFlow.accounts[account], fileName);
+    await ynab.uploadCSV(pageYNAB, bank.ynabAccount, ynabCSV);
 }
 
-main(ANZFlow);
+main(BNZFlow);
 
 
 

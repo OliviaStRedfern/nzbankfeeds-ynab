@@ -21,8 +21,6 @@ class LoginFlow {
 
         await page.click(this.submitButton);
         await page.waitForNavigation();
-
-        console.log(`    login complete`);
     }
 }
 

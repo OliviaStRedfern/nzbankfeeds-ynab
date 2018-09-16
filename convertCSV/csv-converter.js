@@ -19,6 +19,7 @@ async function convertCSVWithTransformation(transformation, csvFileName) {
     console.log(`invoked function convertCSVWithTransformation(...)`)
     input.pipe(parser).pipe(transformer).pipe(outputSteam);
     console.log(`Completed conversion: ${ynabCSVFile}`)
+    return ynabCSVFile;
 }
 
 const lookupinator = {
