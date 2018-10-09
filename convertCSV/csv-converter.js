@@ -2,7 +2,7 @@ const fs = require('fs');
 const parse = require('csv-parse');
 const transform = require('stream-transform');
 var colors = require('colors');
-const CSV_FOLDER_PATH = "/Users/conradjohnston/Downloads";
+const CSV_FOLDER_PATH = require('os').homedir() + "/Downloads";
 
 async function convertCSVWithTransformation(transformation, csvFileName) {
     const parser = parse({ delimiter: ',' })

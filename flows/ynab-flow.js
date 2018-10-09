@@ -51,7 +51,6 @@ class YNABFlow {
     constructor(secrets) {
         this.log("YNABFlow object created");
         this.SECRETS = secrets;
-        console.dir(this);
     }
 
     log(message) {
