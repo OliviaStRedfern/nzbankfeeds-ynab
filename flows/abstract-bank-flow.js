@@ -1,32 +1,14 @@
-const LoginFlow = require("./shared-login-flow");
-const moment = require("moment");
 const { CSV_FOLDER_PATH } = require("../convertCSV/csv-converter");
 const fs = require("fs");
 const { isCSV } = require("../utils/file-system");
-var colors = require('colors');
+const AbstractFlow = require("./abstract-flow");
 
-const SELECTORS = {
-    login: {},
-    home: "",
-    onlineCode: {},
-    accounts: {
-        getSelectorForAccount(accountType) {
-            return `${accountType}`
-        }
-    },
-    export: {},
-    logout: {}
-}
-
-class AbstractBankFlow {
+class AbstractBankFlow extends AbstractFlow {
 
     constructor() {
+        super();
         this.log("AbstractBankFlow object created");
         this.DATE_FORMAT = "DD/MM/YYYY";
-        this.loginFlow = null;
-
-        // Can be overridden if the URL doesn't redirect to the home page
-        this.HOME = null;
 
         // Must be overridden
         this.ynabAccount = undefined;
@@ -34,31 +16,6 @@ class AbstractBankFlow {
         this.SECRETS = undefined;
         this.URL = undefined;
         this.SELECTORS = undefined;
-    }
-    log(message) {
-        console.log(message.magenta);
-    }
-
-    async login(page) {
-        this.log("invoked AbstractBankFlow::login");
-        console.log(this.SELECTORS.login.userIDField);
-        if (this.loginFlow === null) {
-            this.log("    creating LoginFlow object");
-            this.loginFlow = new LoginFlow(
-                this.URL,
-                this.SELECTORS.login.userIDField,
-                this.SELECTORS.login.passwordField,
-                this.SELECTORS.login.loginButton
-            );
-            await this.loginFlow.login(page, this.SECRETS.userID, this.SECRETS.password);
-        } else {
-            this.log("    re-using existing session");
-            if (this.HOME === null) {
-                await page.goto(this.URL);
-            } else {
-                await page.goto(this.HOME);
-            }
-        }
     }
 
     async navigateToExportTransactions(page) {

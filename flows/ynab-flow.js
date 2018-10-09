@@ -1,4 +1,4 @@
-const LoginFlow = require("./shared-login-flow");
+const AbstractFlow = require("./abstract-flow");
 const moment = require("moment");
 const colors = require("colors");
 const { prompt } = require("../utils/helpers");
@@ -30,15 +30,17 @@ const URLS = {
     login: "https://app.youneedabudget.com/users/login",
     home: "https://app.youneedabudget.com"
 }
+
 const SELECTORS = {
     login: {
-        usernameField: "#login-username",
+        userIDField: "#login-username",
         passwordField: "#login-password",
         loginButton: "button[type=submit]",
     },
     import: {
         transactionDates: ".content .ynab-grid-body-row:not(.is-scheduled):not(.needs-approved) .ynab-grid-cell-date",
         startImportButton: "button.accounts-toolbar-file-import-transactions",
+        resetFilters: "[data-register-area=ResetFilters]",
         animationDelay: 200,
         choseImportFile: "input[type=file]",
         confirmImport: ".modal .button-primary",
@@ -46,11 +48,15 @@ const SELECTORS = {
     },
 };
 
-class YNABFlow {
+class YNABFlow extends AbstractFlow {
 
     constructor(secrets) {
+        super();
         this.log("YNABFlow object created");
         this.SECRETS = secrets;
+        this.SELECTORS = SELECTORS;
+        this.HOME = URLS.home; 
+        this.URL = URLS.login;
     }
 
     log(message) {
@@ -60,20 +66,24 @@ class YNABFlow {
     async login(page) {
         this.log("invoked YNABFlow::login");
 
-        const loginFlow = new LoginFlow(
-            URLS.login,
-            SELECTORS.login.usernameField,
-            SELECTORS.login.passwordField,
-            SELECTORS.login.loginButton);
-        await loginFlow.login(page, this.SECRETS.userID, this.SECRETS.password);
+        await super.login(page);
     }
 
     async getMostRecentTransactionMoment(page, ynabAccount) {
         this.log("invoked YNABFlow::getMostRecentTransactionDate");
 
         await this.login(page);
+
+        await page.waitForSelector(ynabAccount.selector);
         await page.click(ynabAccount.selector);
+
+        const resetButton = await page.$$(SELECTORS.import.resetFilters);
+        if (resetButton.length === 1) {
+            await page.click(SELECTORS.import.resetFilters);
+        }
+
         const transactionDateElements = await page.$$(SELECTORS.import.transactionDates);
+
         const mostRecentTransactionUSDate = await page.evaluate(
             el => el.innerText.trim(), transactionDateElements[0]
         );
@@ -103,7 +113,7 @@ class YNABFlow {
         await page.waitForSelector(SELECTORS.import.ok);
         await page.click(SELECTORS.import.ok);
 
-        this.log('    import complete');
+        prompt("Import complete. 😀  Press enter to continue");
     }
     async gotoHome(page) {
         await page.goto(URLS.home);

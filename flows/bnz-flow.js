@@ -49,7 +49,7 @@ class BNZFlow extends AbstractBankFlow {
     async login(page) {
         this.log("invoked BNZFlow::login");
 
-        super.login(page);
+        await super.login(page);
 
         await prompt('Authorise your login using your device, then press enter');
     }
