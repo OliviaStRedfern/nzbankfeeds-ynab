@@ -1,7 +1,7 @@
 node_modules
 build
 npm-debug.log
-secrets.js
+secrets.js*
 .env
 .DS_Store
 

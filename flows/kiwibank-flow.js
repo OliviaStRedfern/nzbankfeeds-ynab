@@ -1,5 +1,4 @@
 const { prompt, overwriteDateField } = require('../utils/helpers');
-const SECRETS = require('../secrets');
 const AbstractBankFlow = require("./abstract-bank-flow");
 const csvConvert =  require("../convertCSV/kiwibank2ynab");;
 const { ynabAccounts } = require("./ynab-flow")
@@ -11,16 +10,16 @@ const { ynabAccounts } = require("./ynab-flow")
 
 class KiwibankFlow extends AbstractBankFlow {
 
-    constructor() {
+    constructor(secrets) {
         super();
         this.log("KiwibankFlow object created");
         this.ynabAccount = ynabAccounts.Kiwibank;
         this.csvConvert = csvConvert;
-        this.SECRETS = SECRETS.KiwibankFlow;
+        this.SECRETS = secrets;
         this.URL = "https://www.ib.kiwibank.co.nz/accounts/";
         this.SELECTORS = {
             login: {
-                customerNumberField: "#ctl00_c_txtUserName",
+                userIDField: "#ctl00_c_txtUserName",
                 passwordField: "#ctl00_c_txtPassword",
                 loginButton: ".submit_button input",
             },
@@ -30,7 +29,7 @@ class KiwibankFlow extends AbstractBankFlow {
             },
             accounts: {
                 "freeUp": "1",
-                "cc": "3",
+                "cc": "4",
                 getSelectorForAccount(accountType) {
                     return `#account_list tr:nth-child(${accountType}) td.account_title a`
                 }
@@ -58,14 +57,19 @@ class KiwibankFlow extends AbstractBankFlow {
         await prompt('Authorise your login in Chromium');
     }
 
+    getAccountSelector() {
+        return this.SELECTORS.accounts.getSelectorForAccount(this.SELECTORS.accounts.freeUp);
+    }
+
     async navigateToExportTransactions(page) {
         this.log("invoked KiwibankFlow::navigateToExportTransactions");
 
-        const accountSelector = this.SELECTORS.accounts.getSelectorForAccount(this.SELECTORS.accounts.freeUp);
+        const accountSelector = this.getAccountSelector();
         await page.waitForSelector(accountSelector);
         await page.click(accountSelector);
 
-        await page.waitForSelector(this.SELECTORS.export.link);
+        await page.waitForSelector(this.SELECTORS.export.selectFormatOpen);
+
         await page.click(this.SELECTORS.export.link);
 
         await page.waitForSelector(this.SELECTORS.export.selectFormatOpen);
@@ -93,5 +97,4 @@ class KiwibankFlow extends AbstractBankFlow {
 
 }
 
-KiwibankFlow.accountName = "Kiwibank";
 module.exports = KiwibankFlow;

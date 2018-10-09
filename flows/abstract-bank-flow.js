@@ -41,16 +41,16 @@ class AbstractBankFlow {
 
     async login(page) {
         this.log("invoked AbstractBankFlow::login");
-        console.log(this.SELECTORS.login.customerNumberField);
+        console.log(this.SELECTORS.login.userIDField);
         if (this.loginFlow === null) {
             this.log("    creating LoginFlow object");
             this.loginFlow = new LoginFlow(
                 this.URL,
-                this.SELECTORS.login.customerNumberField,
+                this.SELECTORS.login.userIDField,
                 this.SELECTORS.login.passwordField,
                 this.SELECTORS.login.loginButton
             );
-            await this.loginFlow.login(page, this.SECRETS.customerNumber, this.SECRETS.password);
+            await this.loginFlow.login(page, this.SECRETS.userID, this.SECRETS.password);
         } else {
             this.log("    re-using existing session");
             if (this.HOME === null) {
@@ -91,6 +91,10 @@ class AbstractBankFlow {
 
     async fillDateField(page, selector, mmmoment) {
         this.log("invoked AbstractBankFlow::fillDateField");
+    }
+
+    getAccountSelector() {
+        this.log("invoked AbstractBankFlow::getAccountSelector");
     }
 
     async logout(page) {

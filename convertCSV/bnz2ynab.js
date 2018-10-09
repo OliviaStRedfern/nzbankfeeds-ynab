@@ -40,7 +40,7 @@ const transformation = function (record, callback) {
         row += `",`;
 
         // OUTFLOW / INFLOW
-        amount = lookupinator.lookup('amount', SOURCE_COLS);
+        amount = lookupinator.lookup('amount');
         if (amount > 0) {
             row += `,${amount}`;
         } else {

@@ -32,6 +32,9 @@ const lookupinator = {
         const index = this.columnNames.findIndex(
             columnName => columnName.toLowerCase() === searchTerm.toLowerCase()
         );
+        if (this.record[index] === undefined) {
+            console.log(`lookupinator error for ${searchTerm}`.red);
+        }
         return this.record[index].trim();
     }
 }

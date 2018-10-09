@@ -1,17 +1,12 @@
 const moment = require('moment');
-const { convertCSVWithTransformation, lookupinator, YNAB_COLS} = require('./csv-converter');
+const { convertCSVWithTransformation, lookupinator, YNAB_COLS } = require('./csv-converter');
 var colors = require('colors');
 
 const SOURCE_COLS = [
-    'Type',
-    'Details',
-    'Particulars',
-    'Code',
-    'Reference',
-    'Amount',
-    'Date',
-    'ForeignCurrencyAmount',
-    'ConversionCharge'
+    "Date", 
+    "Memo/Description", 
+    "?", 
+    "Amount"
 ];
 
 let isFirst = true;
@@ -25,21 +20,17 @@ const transformation = function (record, callback) {
     } else {
 
         // DATE
-        let date = lookupinator.lookup('date');
+        let date = lookupinator.lookup('Date');
         let dateMoment = moment(date, "DD-MM-YYYY");
         row += `${dateMoment.format("MM/DD/YYYY")},`;
 
         // PAYEE
-        let payee = lookupinator.lookup('code');
-        let details = lookupinator.lookup('details');
-        if (payee === "2380   C") {
-            [payee, details] = [details, payee];
-        }
-
+        let payee = lookupinator.lookup('Memo/Description');
         row += `"${payee}",`;
 
         // MEMO
-        row += `"${details} ${lookupinator.lookup('particulars')} ${lookupinator.lookup('reference')}",`;
+        let memo = lookupinator.lookup('?');
+        row += `"${memo}",`;
 
         // OUTFLOW / INFLOW
         amount = lookupinator.lookup('amount');
