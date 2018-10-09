@@ -1,16 +1,15 @@
 const { prompt, wait, overwriteDateField } = require('../utils/helpers');
 const AbstractBankFlow = require("./abstract-bank-flow");
-const SECRETS = require('../secrets');
 const csvConvert = require("../convertCSV/westpac2ynab");
 const { ynabAccounts } = require("./ynab-flow")
 class WestpacFlow extends AbstractBankFlow {
 
-    constructor() {
+    constructor(secrets) {
         super();
         this.log("WestpacFlow object created");
         this.ynabAccount = ynabAccounts.Westpac;
         this.csvConvert = csvConvert;
-        this.SECRETS = SECRETS.WestpacFlow;
+        this.SECRETS = secrets;
         this.URL = "https://bank.westpac.co.nz/one/app.html#accounts";
         this.SELECTORS = {
             login: {

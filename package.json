@@ -12,10 +12,12 @@
     "colors": "^1.3.2",
     "csv": "^3.1.0",
     "fs": "0.0.1-security",
+    "jsonfile": "^5.0.0",
     "moment": "^2.22.2",
     "node-qunit": "^1.0.0",
     "osa-imessage": "^2.4.2",
     "puppeteer": "^1.7.0",
+    "readline-sync": "^1.4.9",
     "requirejs": "^2.3.6",
     "tesseract.js": "^1.0.10"
   },

@@ -1,18 +1,14 @@
 const moment = require("moment");
-var colors = require('colors');
+const colors = require('colors');
+const readlineSync = require('readline-sync');
 
-function prompt(question) {
-    return new Promise(resolve => {
+function prompt(text) {
+    return readlineSync.question(text);
+}
 
-        var stdin = process.stdin,
-            stdout = process.stdout;
-
-        stdin.resume();
-        stdout.write(question.bgGreen.black);
-
-        stdin.once('data', function (data) {
-            resolve(data.toString().trim());
-        });
+function secretPrompt(text) {
+    return readlineSync.question(text, {
+        hideEchoBack: true
     });
 }
 
@@ -49,4 +45,4 @@ async function overwriteDateField(page, selector, mmmoment, dateFormat) {
     console.log(`    typed ${date}`.green);
 }
 
-module.exports = { prompt, wait, isSelectorVisible, overwriteDateField };
+module.exports = { prompt, secretPrompt, wait, isSelectorVisible, overwriteDateField };

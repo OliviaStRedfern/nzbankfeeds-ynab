@@ -1,5 +1,4 @@
 const { prompt, overwriteDateField } = require('../utils/helpers');
-const SECRETS = require('../secrets');
 const AbstractBankFlow = require("./abstract-bank-flow");
 const csvConvert =  require("../convertCSV/kiwibank2ynab");;
 const { ynabAccounts } = require("./ynab-flow")
@@ -11,12 +10,12 @@ const { ynabAccounts } = require("./ynab-flow")
 
 class KiwibankFlow extends AbstractBankFlow {
 
-    constructor() {
+    constructor(secrets) {
         super();
         this.log("KiwibankFlow object created");
         this.ynabAccount = ynabAccounts.Kiwibank;
         this.csvConvert = csvConvert;
-        this.SECRETS = SECRETS.KiwibankFlow;
+        this.SECRETS = secrets;
         this.URL = "https://www.ib.kiwibank.co.nz/accounts/";
         this.SELECTORS = {
             login: {

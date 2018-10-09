@@ -1,5 +1,4 @@
 const { prompt, isSelectorVisible } = require('../utils/helpers');
-const SECRETS = require('../secrets');
 const moment = require("moment");
 const csvConvert = require("../convertCSV/bnz2ynab");
 const AbstractBankFlow = require("./abstract-bank-flow");
@@ -7,12 +6,12 @@ const { ynabAccounts } = require("./ynab-flow")
 
 class BNZFlow extends AbstractBankFlow {
 
-    constructor() {
+    constructor(secrets) {
         super();
         this.log("BNZFlow object created");
         this.ynabAccount = ynabAccounts.BNZ;
         this.csvConvert = csvConvert;
-        this.SECRETS = SECRETS.BNZFlow;
+        this.SECRETS = secrets;
         this.URL = "https://secure.bnz.co.nz/auth/personal-login";
         this.HOME = "https://www.bnz.co.nz/client/";
         this.SELECTORS = {

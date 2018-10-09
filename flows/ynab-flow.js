@@ -1,4 +1,3 @@
-const SECRETS = require('../secrets');
 const LoginFlow = require("./shared-login-flow");
 const moment = require("moment");
 const colors = require("colors");
@@ -49,8 +48,10 @@ const SELECTORS = {
 
 class YNABFlow {
 
-    constructor() {
+    constructor(secrets) {
         this.log("YNABFlow object created");
+        this.SECRETS = secrets;
+        console.dir(this);
     }
 
     log(message) {
@@ -65,7 +66,7 @@ class YNABFlow {
             SELECTORS.login.usernameField,
             SELECTORS.login.passwordField,
             SELECTORS.login.loginButton);
-        await loginFlow.login(page, SECRETS.ynab.username, SECRETS.ynab.password);
+        await loginFlow.login(page, this.SECRETS.userID, this.SECRETS.password);
     }
 
     async getMostRecentTransactionMoment(page, ynabAccount) {

@@ -1,16 +1,17 @@
-const ANZFlow = require("./flows/anz-flow");
-const BNZFlow = require("./flows/bnz-flow");
-const KiwibankCCFlow = require("./flows/kiwibank-cc-flow");
-const KiwibankFlow = require("./flows/kiwibank-flow");
-const WestpacFlow = require("./flows/westpac-flow");
-const WestpacCCFlow = require("./flows/westpac-cc-flow");
-const { YNABFlow } = require("./flows/ynab-flow");
+// const ANZFlow = require("./flows/anz-flow");
+// const BNZFlow = require("./flows/bnz-flow");
+// const KiwibankCCFlow = require("./flows/kiwibank-cc-flow");
+// const KiwibankFlow = require("./flows/kiwibank-flow");
+// const WestpacFlow = require("./flows/westpac-flow");
+// const WestpacCCFlow = require("./flows/westpac-cc-flow");
+// const { YNABFlow } = require("./flows/ynab-flow");
 const moment = require("moment");
 const launchBrowser = require("./utils/launch-browser");
+const getFlow = require("./flows/flow-factory");
 
-async function main(BankFlow) {
-    const ynab = new YNABFlow();
-    const bank = new BankFlow(200);
+async function main(bankFlow) {
+    const ynab = getFlow("ynab-flow");
+    const bank = getFlow(bankFlow);
 
     const pageBank = await launchBrowser();
     const pageYNAB = await launchBrowser();
@@ -26,7 +27,7 @@ async function main(BankFlow) {
     await ynab.uploadCSV(pageYNAB, bank.ynabAccount, ynabCSV);
 }
 
-main(WestpacCCFlow);
+main("anz-flow");
 
 
 

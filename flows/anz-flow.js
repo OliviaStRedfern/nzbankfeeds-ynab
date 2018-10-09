@@ -1,16 +1,15 @@
 const { prompt, wait, overwriteDateField } = require('../utils/helpers');
 const AbstractBankFlow = require("./abstract-bank-flow");
-const SECRETS = require('../secrets');
 const csvConvert = require("../convertCSV/anz2ynab");
 const { ynabAccounts } = require("./ynab-flow")
 class ANZFlow extends AbstractBankFlow {
 
-    constructor() {
+    constructor(secrets) {
         super();
         this.log("ANZFlow object created");
         this.ynabAccount = ynabAccounts.ANZ;
         this.csvConvert = csvConvert;
-        this.SECRETS = SECRETS.ANZFlow;
+        this.SECRETS = secrets;
         this.URL = "https://secure.anz.co.nz/IBCS/service/home";
         this.SELECTORS = {
             login: {
