@@ -52,9 +52,9 @@ class KiwibankFlow extends AbstractBankFlow {
     async login(page) {
         this.log("invoked KiwibankFlow::login");
 
-        super.login(page);
-
-        await prompt('Authorise your login in Chromium');
+        if (super.login(page) ) {
+            await prompt('Authorise your login in Chromium then press enter ');
+        }
     }
 
     getAccountSelector() {

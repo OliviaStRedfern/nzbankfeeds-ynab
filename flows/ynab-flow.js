@@ -83,7 +83,10 @@ class YNABFlow extends AbstractFlow {
         }
 
         const transactionDateElements = await page.$$(SELECTORS.import.transactionDates);
-
+        if (transactionDateElements.length === 0) {
+            console.log(`    YNAB is already up to date`.green);
+            return null;
+        }
         const mostRecentTransactionUSDate = await page.evaluate(
             el => el.innerText.trim(), transactionDateElements[0]
         );

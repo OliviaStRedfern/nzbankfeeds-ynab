@@ -8,6 +8,6 @@ async function launchBrowser(slow = 1) {
         slowMo: slow,
     });
     const page = await browser.newPage();
-    return browser;
+    return {browser, page};
 }
 module.exports = launchBrowser;

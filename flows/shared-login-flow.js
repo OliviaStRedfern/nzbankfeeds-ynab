@@ -9,6 +9,10 @@ class LoginFlow {
     }
 
     async login(page, username, password) {
+        if (username.length === 0) {
+            console.error(`    No username supplied, could not login`);
+            return false;
+        }
         console.log(`    logging in user ${username}`);
 
         await page.goto(this.URL);
@@ -21,6 +25,7 @@ class LoginFlow {
 
         await page.click(this.submitButton);
         await page.waitForNavigation();
+        return true;
     }
 }
 

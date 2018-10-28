@@ -41,9 +41,12 @@ class AbstractBankFlow extends AbstractFlow {
     async getCSV(page, startMoment, endMoment) {
         this.log("invoked AbstractBankFlow::getCSV");
 
-        await this.login(page);
-        await this.navigateToExportTransactions(page);
-        return this.downloadTransactions(page, startMoment, endMoment);
+        if (await this.login(page) ) {
+            await this.navigateToExportTransactions(page);
+            return this.downloadTransactions(page, startMoment, endMoment);
+        } else {
+            return null;
+        }
     }
 
     async fillDateField(page, selector, mmmoment) {

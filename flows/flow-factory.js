@@ -2,8 +2,14 @@ const jsonfile = require('jsonfile')
 const { prompt, secretPrompt } = require('../utils/helpers');
 const secretsFile = "./secrets.json"
 const fs = require('fs');
+const Cryptr = require('cryptr');
+let cryptr = null;
 
 function getSecrets(flowName) {
+    if (cryptr === null) {
+        const key = secretPrompt(`Enter your password: `);
+        cryptr = new Cryptr(key);
+    }
     let secrets;
     try {
         secrets = jsonfile.readFileSync(secretsFile);
@@ -18,17 +24,23 @@ function getSecrets(flowName) {
     }
     if (secrets[flowName] === undefined) {
         secrets[flowName] = requestSecretsFromUser(flowName);
-        let fd = jsonfile.writeFileSync(secretsFile, secrets, { spaces: 2, EOL: '\r\n' });
-        fs.close(fd);
+        jsonfile.writeFileSync(secretsFile, secrets, { spaces: 2, EOL: '\r\n' });
     }
-    return secrets[flowName];
+    const encryptedSecrets = secrets[flowName];
+    return { 
+        userID: cryptr.decrypt(encryptedSecrets.userID), 
+        password:cryptr.decrypt(encryptedSecrets.password) 
+    };
 }
 
 function requestSecretsFromUser(flowName) {
     const userID = prompt(`Enter your ${flowName} user ID: `);
     const password = secretPrompt(`Enter your ${flowName} password: `);
 
-    return { userID, password};
+    return { 
+        userID: cryptr.encrypt(userID), 
+        password:cryptr.encrypt(password) 
+    };
 }
 
 function getFlow(flowName) {

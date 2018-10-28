@@ -28,7 +28,7 @@ class AbstractFlow {
                 this.SELECTORS.login.passwordField,
                 this.SELECTORS.login.loginButton
             );
-            await this.loginFlow.login(page, this.SECRETS.userID, this.SECRETS.password);
+            return await this.loginFlow.login(page, this.SECRETS.userID, this.SECRETS.password);
         } else {
             this.log("    re-using existing session");
             if (this.HOME === null) {
@@ -36,6 +36,7 @@ class AbstractFlow {
             } else {
                 await page.goto(this.HOME);
             }
+            return true;
         }
     }
 }
