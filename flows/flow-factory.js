@@ -7,8 +7,8 @@ let cryptr = null;
 
 function getSecrets(flowName) {
     if (cryptr === null) {
-        const key = secretPrompt(`Enter your password: `);
-        cryptr = new Cryptr(key);
+        //const key = secretPrompt(`Enter your password: `);
+        cryptr = new Cryptr("***REMOVED***");
     }
     let secrets;
     try {
