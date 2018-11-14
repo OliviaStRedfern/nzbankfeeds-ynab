@@ -16,9 +16,9 @@ async function downloadTransactions(context, mostRecentTransactionMoment) {
     const { bank, pageBank } = context;
     const todayMoment = moment();
     const fileName = await bank.getCSV(pageBank, mostRecentTransactionMoment, todayMoment);
-    if (fileName) {
+    //if (fileName) {
         await uploadTransactions(context, fileName);
-    }
+    //}
 }
 
 async function uploadTransactions(context, fileName) {
@@ -30,9 +30,9 @@ async function uploadTransactions(context, fileName) {
 
 async function main() {
     const flows = [
-        // "anz-flow",
-        // "bnz-flow",
-        // "kiwibank-cc-flow",
+        "anz-flow",
+        "bnz-flow",
+        "kiwibank-cc-flow",
         "kiwibank-flow",
         "westpac-flow",
         "westpac-cc-flow"
