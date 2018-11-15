@@ -6,11 +6,14 @@ module.exports = {
     plugins: [
         "mocha",
         "chai-expect",
+        "chai-friendly",
     ],
     rules: {
-        "mocha/no-exclusive-tests": "error",
-        "mocha/no-identical-title": "error",
-        "chai-expect/missing-assertion": "error",
-        "chai-expect/terminating-properties": "error"        
+        "mocha/no-exclusive-tests": 2,
+        "mocha/no-identical-title": 2,
+        "chai-expect/missing-assertion": 2,
+        "chai-expect/terminating-properties": 2,
+        "no-unused-expressions": 0,
+        "chai-friendly/no-unused-expressions": 2
     }
 }
