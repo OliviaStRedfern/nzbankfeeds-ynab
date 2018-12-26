@@ -1,31 +1,7 @@
 const { expect } = require('chai')
-const sinon = require('sinon')
 const AbstractFlowMock = require('./mocks/abstract-flow-mock')
-
-const SECRETS = {
-  userID: 'userID',
-  password: 'password'
-}
-const SELECTORS = {
-  login: {
-    userIDField: 'userIDField',
-    passwordField: 'passwordField',
-    loginButton: 'loginButton'
-  }
-}
-const urlHome = 'mock://home'
-const urlLogin = 'mock://login'
-
-const pageMock = () => {
-  return {
-    goto: sinon.fake(),
-    click: sinon.fake(),
-    waitForNavigation: sinon.fake(),
-    keyboard: {
-      type: sinon.fake()
-    }
-  }
-}
+const pageMock = require('./mocks/page-mock')
+const { SECRETS, SELECTORS, urlLogin, urlHome } = require('./mocks/config-mock')
 
 const flowMock = () => {
   return new AbstractFlowMock(SECRETS, SELECTORS, urlLogin, urlHome)

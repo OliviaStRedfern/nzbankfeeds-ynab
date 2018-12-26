@@ -1,69 +1,68 @@
-const { CSV_FOLDER_PATH } = require("../convertCSV/csv-converter");
-const fs = require("fs");
-const { isCSV } = require("../utils/file-system");
-const AbstractFlow = require("./abstract-flow");
+const { CSV_FOLDER_PATH } = require('../convertCSV/csv-converter')
+const fs = require('fs')
+const { isCSV } = require('../utils/file-system')
+const AbstractFlow = require('./abstract-flow')
+const { AbstractMethodInvocationError } = require('../utils/error-classes')
 
 class AbstractBankFlow extends AbstractFlow {
+  constructor (SECRETS, SELECTORS, urlLogin, urlHome) {
+    super(SECRETS, SELECTORS, urlLogin, urlHome)
 
-    constructor() {
-        super();
-        this.log("AbstractBankFlow object created");
-        this.DATE_FORMAT = "DD/MM/YYYY";
+    this.log('AbstractBankFlow object created')
 
-        // Must be overridden
-        this.ynabAccount = undefined;
-        this.csvConvert = undefined;
-        this.SECRETS = undefined;
-        this.URL = undefined;
-        this.SELECTORS = undefined;
-    }
+    this.DATE_FORMAT = 'DD/MM/YYYY'
+    this.fs = fs
+    this.isCSV = isCSV
+    this.CSV_FOLDER_PATH = CSV_FOLDER_PATH
 
-    async navigateToExportTransactions(page) {
-        this.log("invoked AbstractBankFlow::navigateToExportTransactions");
-    }
+    // Must be overridden
+    this.ynabAccount = undefined
+    this.csvConvert = undefined
+  }
 
-    downloadCSV(page, downloadSelector) {
-        this.log(`invoked AbstractBankFlow::downloadTransactions`);
-        return new Promise(resolve => {
-            console.log(`    watching for a new CSV file in ${CSV_FOLDER_PATH}`);
-            const watcher = fs.watch(CSV_FOLDER_PATH, {}, (eventType, fileName) => {
-                console.log(`        downloading ${fileName}`.italic);
-                if (isCSV(fileName)) {
-                    console.log(`    finished downloading ${fileName}`.bgCyan.black);
-                    watcher.close();
-                    resolve(fileName);
-                }
-            });
-            page.click(downloadSelector);
-        });
-    }
+  static convertCSV () {
+    throw new AbstractMethodInvocationError()
+  }
+  static accountName () {
+    throw new AbstractMethodInvocationError()
+  }
+  async navigateToExportTransactions (page) {
+    throw new AbstractMethodInvocationError()
+  }
+  async fillDateField (page, selector, mmmoment) {
+    throw new AbstractMethodInvocationError()
+  }
+  getAccountSelector () {
+    throw new AbstractMethodInvocationError()
+  }
+  downloadTransactions () {
+    throw new AbstractMethodInvocationError()
+  }
+  downloadCSV (page, downloadSelector) {
+    return new Promise(resolve => {
+      const watcher = this.fs.watch(this.CSV_FOLDER_PATH, {}, (_eventType, fileName) => {
+        if (this.isCSV(fileName)) {
+          watcher.close()
 
-    async getCSV(page, startMoment, endMoment) {
-        this.log("invoked AbstractBankFlow::getCSV");
-
-        if (await this.login(page) ) {
-            await this.navigateToExportTransactions(page);
-            return this.downloadTransactions(page, startMoment, endMoment);
-        } else {
-            return null;
+          resolve(fileName)
         }
-    }
+      })
+      page.click(downloadSelector)
+    })
+  }
 
-    async fillDateField(page, selector, mmmoment) {
-        this.log("invoked AbstractBankFlow::fillDateField");
+  async getCSV (page, startMoment, endMoment) {
+    if (await this.login(page)) {
+      await this.navigateToExportTransactions(page)
+      return this.downloadTransactions(page, startMoment, endMoment)
+    } else {
+      return null
     }
-
-    getAccountSelector() {
-        this.log("invoked AbstractBankFlow::getAccountSelector");
-    }
-
-    async logout(page) {
-        this.log("invoked AbstractBankFlow::logout");
-        this.log("    didn't logout: not implemented");
-    }
-
+  }
+  async logout (page) {
+    this.log('invoked AbstractBankFlow::logout')
+    this.log("    didn't logout: not implemented")
+  }
 }
 
-AbstractBankFlow.convertCSV = undefined;
-AbstractBankFlow.accountName = undefined;
-module.exports = AbstractBankFlow;
+module.exports = AbstractBankFlow

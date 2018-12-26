@@ -1,4 +1,5 @@
-var colors = require('colors')
+// eslint-disable-next-line no-unused-vars
+const colors = require('colors')
 
 class AbstractFlow {
   constructor (SECRETS, SELECTORS, urlLogin, urlHome) {
