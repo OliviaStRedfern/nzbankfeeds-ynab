@@ -62,16 +62,12 @@ class YNABFlow extends AbstractFlow {
     console.log(message.dim)
   }
 
-  async login (page) {
-    this.log('invoked YNABFlow::login')
-
-    await super.login(page)
-  }
-
   async getMostRecentTransactionMoment (page, ynabAccount) {
     this.log('invoked YNABFlow::getMostRecentTransactionDate')
 
-    await this.login(page)
+    if (!await this.authenticate(page)) {
+      return false
+    }
 
     await page.waitForSelector(ynabAccount.selector)
     await page.click(ynabAccount.selector)

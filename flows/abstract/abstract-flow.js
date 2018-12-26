@@ -23,8 +23,7 @@ class AbstractFlow {
   async authenticate (page) {
     this.log('invoked AbstractFlow::authenticate')
     if (this.isAuthenticated === false) {
-      console.dir(this.SECRETS)
-      this.isAuthenticated = await this.login(page, this.SECRETS.userID, this.SECRETS.password)
+      this.isAuthenticated = await this.__login(page, this.SECRETS.userID, this.SECRETS.password, this.SELECTORS.login)
       return this.isAuthenticated
     } else {
       this.log('    re-using existing session')
@@ -34,7 +33,7 @@ class AbstractFlow {
     }
   }
 
-  async login (page, userID, password) {
+  async __login (page, userID, password, loginSelectors) {
     this.log('invoked AbstractFlow::login')
     if (!userID) {
       console.error(`    No userID supplied, could not login`)
@@ -44,13 +43,13 @@ class AbstractFlow {
 
     await page.goto(this.urlLogin)
 
-    await page.click(this.usernameField)
+    await page.click(loginSelectors.userIDField)
     await page.keyboard.type(userID)
 
-    await page.click(this.passwordField)
+    await page.click(loginSelectors.passwordField)
     await page.keyboard.type(password)
 
-    await page.click(this.submitButton)
+    await page.click(loginSelectors.loginButton)
     await page.waitForNavigation()
     return true
   }

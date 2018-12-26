@@ -2,6 +2,7 @@ const jsonfile = require('jsonfile')
 const { prompt, secretPrompt } = require('../utils/helpers')
 const secretsFile = './secrets.json'
 const Cryptr = require('cryptr')
+const check = 'little fluffy clouds'
 let cryptr = null
 
 function getSecrets (flowName) {
@@ -15,11 +16,17 @@ function getSecrets (flowName) {
   } catch (e) {
     if (e.code === 'ENOENT') {
       console.log(`Will create new ${secretsFile} for credential storage in plain text`)
-      secrets = {}
-      secrets[flowName] = undefined
+      secrets = {
+        check: cryptr.encrypt(check),
+        flowName: undefined
+      }
     } else {
       throw (e)
     }
+  }
+  if (cryptr.decrypt(secrets.check) !== check) {
+    console.log('There was a problem opening your secrets file, did you enter your password wrong?')
+    return null
   }
   if (secrets[flowName] === undefined) {
     secrets[flowName] = requestSecretsFromUser(flowName)

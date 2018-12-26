@@ -1,7 +1,7 @@
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
-const expect = chai.expect
+const { expect } = chai
 const sinon = require('sinon')
 const AbstractBankFlowMock = require('./mocks/abstract-bank-flow-mock')
 const pageMock = require('./mocks/page-mock')
@@ -60,7 +60,7 @@ describe('AbstractBankFlow member functions', () => {
     const fs = flow.fs
     const path = flow.CSV_FOLDER_PATH
     const fileName = testFileName()
-    flow.isCSV = sinon.fake.returns(true);
+    flow.isCSV = sinon.fake.returns(true)
 
     // act
     const promise = flow.downloadCSV(page, SELECTORS.download)
