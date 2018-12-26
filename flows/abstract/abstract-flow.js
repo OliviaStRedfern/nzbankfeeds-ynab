@@ -1,15 +1,17 @@
-// eslint-disable-next-line no-unused-vars
-const colors = require('colors')
+require('colors')
+const { ClassInitializationError } = require('../../utils/error-classes')
 
 class AbstractFlow {
   constructor (SECRETS, SELECTORS, urlLogin, urlHome) {
+    if (!SECRETS || !SELECTORS || !urlLogin || !urlHome) {
+      throw new ClassInitializationError()
+    }
     this.log('AbstractFlow object created')
 
     this.SECRETS = SECRETS
     this.SELECTORS = SELECTORS
     this.isAuthenticated = false
 
-    // Can be overridden if the URL doesn't redirect to the home page
     this.urlLogin = urlLogin
     this.urlHome = urlHome
   }
@@ -21,6 +23,7 @@ class AbstractFlow {
   async authenticate (page) {
     this.log('invoked AbstractFlow::authenticate')
     if (this.isAuthenticated === false) {
+      console.dir(this.SECRETS)
       this.isAuthenticated = await this.login(page, this.SECRETS.userID, this.SECRETS.password)
       return this.isAuthenticated
     } else {
@@ -31,18 +34,18 @@ class AbstractFlow {
     }
   }
 
-  async login (page, username, password) {
+  async login (page, userID, password) {
     this.log('invoked AbstractFlow::login')
-    if (username.length === 0) {
-      console.error(`    No username supplied, could not login`)
+    if (!userID) {
+      console.error(`    No userID supplied, could not login`)
       return false
     }
-    console.log(`    logging in user ${username}`)
+    console.log(`    logging in user ${userID}`)
 
     await page.goto(this.urlLogin)
 
     await page.click(this.usernameField)
-    await page.keyboard.type(username)
+    await page.keyboard.type(userID)
 
     await page.click(this.passwordField)
     await page.keyboard.type(password)
