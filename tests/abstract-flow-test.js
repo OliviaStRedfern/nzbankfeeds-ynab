@@ -26,7 +26,7 @@ describe('logging into a web site', () => {
   it('login goes to the correct url and the clicks and typing are OK', async () => {
     const page = pageMock()
     const flow = flowMock()
-    const result = await flow.login(page, SECRETS.userID, SECRETS.password)
+    const result = await flow.__login(page, SECRETS.userID, SECRETS.password, SELECTORS.login)
     expect(result).to.be.true
     expect(page.goto.alwaysCalledWithExactly(urlLogin)).to.be.true
     expect(page.click.calledThrice).to.be.true
@@ -37,7 +37,7 @@ describe('logging into a web site', () => {
   it('login fails if no username is provided', async () => {
     const page = pageMock()
     const flow = flowMock()
-    const result = await flow.login(page, '', SECRETS.password)
+    const result = await flow.__login(page, '', SECRETS.password)
     expect(result).to.be.false
   })
 
