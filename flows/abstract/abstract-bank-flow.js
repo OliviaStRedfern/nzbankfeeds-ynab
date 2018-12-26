@@ -1,11 +1,14 @@
-const { CSV_FOLDER_PATH } = require('../convertCSV/csv-converter')
+const { CSV_FOLDER_PATH } = require('../../convertCSV/csv-converter')
 const fs = require('fs')
-const { isCSV } = require('../utils/file-system')
+const { isCSV } = require('../../utils/file-system')
 const AbstractFlow = require('./abstract-flow')
-const { AbstractMethodInvocationError } = require('../utils/error-classes')
+const { AbstractMethodInvocationError, ClassInitializationError } = require('../../utils/error-classes')
 
 class AbstractBankFlow extends AbstractFlow {
   constructor (SECRETS, SELECTORS, urlLogin, urlHome) {
+    if (!SECRETS || !SELECTORS || !urlLogin || !urlHome) {
+      throw new ClassInitializationError()
+    }
     super(SECRETS, SELECTORS, urlLogin, urlHome)
 
     this.log('AbstractBankFlow object created')
@@ -43,7 +46,6 @@ class AbstractBankFlow extends AbstractFlow {
       const watcher = this.fs.watch(this.CSV_FOLDER_PATH, {}, (_eventType, fileName) => {
         if (this.isCSV(fileName)) {
           watcher.close()
-
           resolve(fileName)
         }
       })

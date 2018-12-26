@@ -1,4 +1,4 @@
-const AbstractFlow = require('../../flows/abstract-flow')
+const AbstractFlow = require('../../flows/abstract/abstract-flow')
 
 class AbstractFlowMock extends AbstractFlow {
   // eslint-disable-next-line no-useless-constructor

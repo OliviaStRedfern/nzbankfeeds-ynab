@@ -9,8 +9,16 @@ const flowMock = () => {
 
 describe('can instantiate', () => {
   it('instantiates', () => {
+    // act
     const flow = flowMock()
+
+    // assert
     expect(flow instanceof AbstractFlowMock).to.be.true
+  })
+  it('does not allow instantiation without valid parameters', () => {
+    // assert
+    expect(() => new AbstractFlowMock()).to.throw('ClassInitializationError')
+    expect(() => new AbstractFlowMock(null, null, null, null)).to.throw('ClassInitializationError')
   })
 })
 
@@ -26,7 +34,7 @@ describe('logging into a web site', () => {
     expect(page.waitForNavigation.calledOnce).to.be.true
   })
 
-  it('login fails if no username is proviced', async () => {
+  it('login fails if no username is provided', async () => {
     const page = pageMock()
     const flow = flowMock()
     const result = await flow.login(page, '', SECRETS.password)

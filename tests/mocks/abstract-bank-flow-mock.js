@@ -1,4 +1,4 @@
-const AbstractBankFlow = require('../../flows/abstract-bank-flow')
+const AbstractBankFlow = require('../../flows/abstract/abstract-bank-flow')
 class AbstractBankFlowMock extends AbstractBankFlow {
   // eslint-disable-next-line no-useless-constructor
   constructor (SECRETS, SELECTORS, urlLogin, urlHome) {
