@@ -7,9 +7,19 @@ const SELECTORS = {
     userIDField: 'userIDField',
     passwordField: 'passwordField',
     loginButton: 'loginButton'
+  },
+  accounts: {
+    getSelectorForAccount (accountType) {
+      return `#SelectorForAccount_${accountType}`
+    }
+  },
+  export: {
+    link: 'exportLink'
   }
 }
 const urlLogin = 'mock://login'
 const urlHome = 'mock://home'
-
-module.exports = { SECRETS, SELECTORS, urlLogin, urlHome }
+const YNAB_ACCOUNT_SELECTOR = {
+  selector: '.row:nth-of-type(1)'
+}
+module.exports = { SECRETS, SELECTORS, YNAB_ACCOUNT_SELECTOR, urlLogin, urlHome }

@@ -42,14 +42,15 @@ class ANZFlow extends AbstractBankFlow {
     this.log('ANZFlow object created')
     this.ynabAccount = ynabAccounts.ANZ
     this.csvConvert = csvConvert
+    this.prompt = prompt
   }
 
-  async login (page) {
+  async authenticate (page) {
     this.log('invoked ANZFlow::login')
 
-    await super.login(page)
+    await super.authenticate(page)
 
-    const onlineCode = await prompt('Enter your online code: ')
+    const onlineCode = await this.prompt('Enter your online code: ')
 
     await page.click(this.SELECTORS.onlineCode.onlineCodeField)
     await page.keyboard.type(onlineCode)

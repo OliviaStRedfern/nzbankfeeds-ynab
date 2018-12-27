@@ -1,7 +1,4 @@
-const chai = require('chai')
-const chaiAsPromised = require('chai-as-promised')
-chai.use(chaiAsPromised)
-const { expect } = chai
+const { expect } = require('./helpers/setup-chai')
 const sinon = require('sinon')
 const AbstractBankFlowMock = require('./mocks/abstract-bank-flow-mock')
 const pageMock = require('./mocks/page-mock')
@@ -76,7 +73,7 @@ describe('AbstractBankFlow member functions', () => {
     const page = pageMock()
     const flow = abstractBankFlow()
     const fileName = testFileName()
-    flow.login = sinon.fake.resolves(true)
+    flow.authenticate = sinon.fake.resolves(true)
     flow.navigateToExportTransactions = sinon.fake.resolves(true)
     flow.downloadTransactions = sinon.fake.resolves(fileName)
 
@@ -84,7 +81,7 @@ describe('AbstractBankFlow member functions', () => {
     const value = await flow.getCSV(page, null, null)
 
     // assert
-    expect(flow.login.calledOnce).to.be.true
+    expect(flow.authenticate.calledOnce).to.be.true
     expect(flow.navigateToExportTransactions.calledOnce).to.be.true
     expect(flow.downloadTransactions.calledOnce).to.be.true
     expect(value).to.equal(fileName)

@@ -54,7 +54,7 @@ class AbstractBankFlow extends AbstractFlow {
   }
 
   async getCSV (page, startMoment, endMoment) {
-    if (await this.login(page)) {
+    if (await this.authenticate(page)) {
       await this.navigateToExportTransactions(page)
       return this.downloadTransactions(page, startMoment, endMoment)
     } else {

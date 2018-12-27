@@ -1,4 +1,4 @@
-const { expect } = require('chai')
+const { expect } = require('./helpers/setup-chai')
 
 describe('testing framework is working', () => {
   it('works', () => {
