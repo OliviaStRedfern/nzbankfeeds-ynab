@@ -2,11 +2,12 @@ const sinon = require('sinon')
 
 module.exports = () => {
   return {
-    goto: sinon.fake(),
-    click: sinon.fake(),
-    waitForNavigation: sinon.fake(),
+    goto: sinon.fake.resolves(true),
+    click: sinon.fake.resolves(true),
+    waitForNavigation: sinon.fake.resolves(true),
+    waitForSelector: sinon.fake.resolves(true),
     keyboard: {
-      type: sinon.fake()
+      type: sinon.fake.resolves(true)
     }
   }
 }

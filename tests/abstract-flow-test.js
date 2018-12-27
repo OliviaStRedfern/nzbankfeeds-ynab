@@ -1,4 +1,4 @@
-const { expect } = require('chai')
+const { expect } = require('./helpers/setup-chai')
 const AbstractFlowMock = require('./mocks/abstract-flow-mock')
 const pageMock = require('./mocks/page-mock')
 const { SECRETS, SELECTORS, urlLogin, urlHome } = require('./mocks/config-mock')
