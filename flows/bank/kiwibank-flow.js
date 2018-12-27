@@ -13,18 +13,18 @@ const SELECTORS = {
   login: {
     userIDField: '#ctl00_c_txtUserName',
     passwordField: '#ctl00_c_txtPassword',
-    loginButton: '.submit_button input'
+    loginButton: '.submit_button input',
   },
   onlineCode: {
     onlineCodeField: '#online-code',
-    verifyButton: '#verify'
+    verifyButton: '#verify',
   },
   accounts: {
     'freeUp': '1',
     'cc': '4',
     getSelectorForAccount (accountType) {
       return `#account_list tr:nth-child(${accountType}) td.account_title a`
-    }
+    },
   },
   export: {
     link: 'a.advanced.open',
@@ -32,12 +32,12 @@ const SELECTORS = {
     selectFormatCSV: 'CSV-Extended',
     startDateField: '#ctl00_c_TransactionSearchControl_DualDateSelector_initialDate_TextBox',
     endDateField: '#ctl00_c_TransactionSearchControl_DualDateSelector_finalDate_TextBox',
-    exportButton: '#ctl00_c_TransactionSearchControl_ActionButton'
+    exportButton: '#ctl00_c_TransactionSearchControl_ActionButton',
   },
   logout: {
     menu: 'button.MenuButton',
-    logoutButton: 'button.js-main-menu-logout'
-  }
+    logoutButton: 'button.js-main-menu-logout',
+  },
 }
 
 class KiwibankFlow extends AbstractBankFlow {

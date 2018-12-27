@@ -9,22 +9,22 @@ const SELECTORS = {
   login: {
     userIDField: '#login-username',
     passwordField: '#login-password',
-    loginButton: '#action-login'
+    loginButton: '#action-login',
   },
   accounts: {
     everyday: '1',
     cc: '2',
     getSelectorForAccount (accountType) {
       return `#accounts-list li:nth-child(${accountType}) a`
-    }
+    },
   },
   export: {
     link: 'a.action-export',
     continue: '#download-transaction-dialog > div > h2',
     startDateField: '.from-datepicker-region input',
     endDateField: '.to-datepicker-region input',
-    exportButton: '#action-export'
-  }
+    exportButton: '#action-export',
+  },
 }
 class WestpacFlow extends AbstractBankFlow {
   constructor (SECRETS) {

@@ -11,18 +11,18 @@ const SELECTORS = {
   login: {
     userIDField: '#field-principal',
     passwordField: '#field-credentials',
-    loginButton: 'form button'
+    loginButton: 'form button',
   },
   onlineCode: {
     onlineCodeField: '#online-code',
-    verifyButton: '#verify'
+    verifyButton: '#verify',
   },
   accounts: {
     closePromo: '.intercom-note-close',
     cc: 'CreditCardDetailsView',
     getSelectorForAccount (accountType) {
       return `.transactions-panel .${accountType}`
-    }
+    },
   },
   export: {
     link: 'button.js-export',
@@ -30,12 +30,12 @@ const SELECTORS = {
     selectFormatCSV: 'a[href=\\#CSV]',
     startDateField: 'input#fromDate',
     endDateField: 'input#toDate',
-    exportButton: 'button.js-submit'
+    exportButton: 'button.js-submit',
   },
   logout: {
     menu: 'button.MenuButton',
-    logoutButton: 'button.js-main-menu-logout'
-  }
+    logoutButton: 'button.js-main-menu-logout',
+  },
 }
 class BNZFlow extends AbstractBankFlow {
   constructor (SECRETS) {
