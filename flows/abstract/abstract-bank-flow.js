@@ -42,7 +42,7 @@ class AbstractBankFlow extends AbstractFlow {
   downloadTransactions () {
     throw new AbstractMethodInvocationError()
   }
-  downloadCSV (page, downloadSelector) {
+  async downloadCSV (page, downloadSelector) {
     return new Promise(resolve => {
       const watcher = this.fs.watch(this.CSV_FOLDER_PATH, {}, (_eventType, fileName) => {
         if (this.isCSV(fileName)) {
@@ -55,12 +55,9 @@ class AbstractBankFlow extends AbstractFlow {
   }
 
   async getCSV (page, startMoment, endMoment) {
-    if (await this.authenticate(page)) {
-      await this.navigateToExportTransactions(page)
-      return this.downloadTransactions(page, startMoment, endMoment)
-    } else {
-      return null
-    }
+    await this.authenticate(page)
+    await this.navigateToExportTransactions(page)
+    return this.downloadTransactions(page, startMoment, endMoment)
   }
   async logout (page) {
     this.log('invoked AbstractBankFlow::logout')
