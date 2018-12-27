@@ -11,7 +11,7 @@ const flowRequires = [
   'kiwibank-cc-flow',
   'kiwibank-flow',
   'westpac-flow',
-  'westpac-cc-flow'
+  'westpac-cc-flow',
 ]
 
 for (let i = 0; i < flowRequires.length; i++) {

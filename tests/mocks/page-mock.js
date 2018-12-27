@@ -9,7 +9,7 @@ module.exports = () => {
     waitForNavigation: sinon.fake(),
     waitForSelector: sinon.fake(),
     keyboard: {
-      type: sinon.fake()
-    }
+      type: sinon.fake(),
+    },
   }
 }

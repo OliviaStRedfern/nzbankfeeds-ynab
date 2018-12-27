@@ -5,38 +5,38 @@ const { prompt } = require('../../utils/helpers')
 const { ClassInitializationError } = require('../../utils/error-classes')
 
 const Kiwibank = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(1)'
+  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(1)',
 }
 const Westpac = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(2)'
+  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(2)',
 }
 const BNZ = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(3)'
+  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(3)',
 }
 const WestpacCC = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(4)'
+  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(4)',
 }
 const KiwibankCC = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(5)'
+  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(5)',
 }
 const ANZ = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(7)'
+  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(7)',
 }
 
 const ynabAccounts = {
-  ANZ, BNZ, Kiwibank, KiwibankCC, Westpac, WestpacCC
+  ANZ, BNZ, Kiwibank, KiwibankCC, Westpac, WestpacCC,
 }
 
 const URLS = {
   login: 'https://app.youneedabudget.com/users/login',
-  home: 'https://app.youneedabudget.com'
+  home: 'https://app.youneedabudget.com',
 }
 
 const SELECTORS = {
   login: {
     userIDField: '#login-username',
     passwordField: '#login-password',
-    loginButton: 'button[type=submit]'
+    loginButton: 'button[type=submit]',
   },
   import: {
     transactionDates: '.content .ynab-grid-body-row:not(.is-scheduled):not(.needs-approved) .ynab-grid-cell-date',
@@ -45,8 +45,8 @@ const SELECTORS = {
     animationDelay: 200,
     choseImportFile: 'input[type=file]',
     confirmImport: '.modal .button-primary',
-    ok: '.modal .button-primary'
-  }
+    ok: '.modal .button-primary',
+  },
 }
 
 class YNABFlow extends AbstractFlow {

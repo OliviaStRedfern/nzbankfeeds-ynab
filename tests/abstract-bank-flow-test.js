@@ -8,7 +8,7 @@ const abstractBankFlow = () => {
   return new AbstractBankFlowMock(SECRETS, MOCK_SELECTORS, urlLogin, urlHome)
 }
 const SELECTORS = {
-  download: '#download'
+  download: '#download',
 }
 const testFileName = () => {
   return `${Date.now()}-stanchion-download-test.csv`

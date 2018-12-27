@@ -9,11 +9,11 @@ const SELECTORS = {
   login: {
     userIDField: '#user-id',
     passwordField: '#password',
-    loginButton: '#submit'
+    loginButton: '#submit',
   },
   onlineCode: {
     onlineCodeField: '#online-code',
-    verifyButton: '#verify'
+    verifyButton: '#verify',
   },
   accounts: {
     cheque: 'im',
@@ -21,15 +21,15 @@ const SELECTORS = {
     kiwisaver: 'investment',
     getSelectorForAccount (accountType) {
       return `.account-group.${accountType} h3.account-name a`
-    }
+    },
   },
   export: {
     link: '#transactions-export-panel-toggle',
     animationDelay: 1000,
     startDateField: 'input[name=start-date]',
     endDateField: 'input[name=end-date]',
-    exportButton: '#transaction-export-submit'
-  }
+    exportButton: '#transaction-export-submit',
+  },
 }
 class ANZFlow extends AbstractBankFlow {
   constructor (SECRETS) {
