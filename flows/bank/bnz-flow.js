@@ -1,48 +1,52 @@
 const { prompt, isSelectorVisible } = require('../../utils/helpers')
 const moment = require('moment')
 const csvConvert = require('../../convertCSV/bnz2ynab')
-const AbstractBankFlow = require('./abstract-bank-flow')
+const AbstractBankFlow = require('../abstract/abstract-bank-flow')
 const { ynabAccounts } = require('../ynab/ynab-flow')
+const { ClassInitializationError } = require('../../utils/error-classes')
 
+const URL = 'https://secure.bnz.co.nz/auth/personal-login'
+const HOME = 'https://www.bnz.co.nz/client/'
+const SELECTORS = {
+  login: {
+    userIDField: '#field-principal',
+    passwordField: '#field-credentials',
+    loginButton: 'form button'
+  },
+  onlineCode: {
+    onlineCodeField: '#online-code',
+    verifyButton: '#verify'
+  },
+  accounts: {
+    closePromo: '.intercom-note-close',
+    cc: 'CreditCardDetailsView',
+    getSelectorForAccount (accountType) {
+      return `.transactions-panel .${accountType}`
+    }
+  },
+  export: {
+    link: 'button.js-export',
+    selectFormatOpen: 'input#ComboboxInput-export-format',
+    selectFormatCSV: 'a[href=\\#CSV]',
+    startDateField: 'input#fromDate',
+    endDateField: 'input#toDate',
+    exportButton: 'button.js-submit'
+  },
+  logout: {
+    menu: 'button.MenuButton',
+    logoutButton: 'button.js-main-menu-logout'
+  }
+}
 class BNZFlow extends AbstractBankFlow {
-  constructor (secrets) {
-    super()
+  constructor (SECRETS) {
+    if (!SECRETS) {
+      throw new ClassInitializationError()
+    }
+
+    super(SECRETS, SELECTORS, URL, HOME)
     this.log('BNZFlow object created')
     this.ynabAccount = ynabAccounts.BNZ
     this.csvConvert = csvConvert
-    this.SECRETS = secrets
-    this.URL = 'https://secure.bnz.co.nz/auth/personal-login'
-    this.HOME = 'https://www.bnz.co.nz/client/'
-    this.SELECTORS = {
-      login: {
-        userIDField: '#field-principal',
-        passwordField: '#field-credentials',
-        loginButton: 'form button'
-      },
-      onlineCode: {
-        onlineCodeField: '#online-code',
-        verifyButton: '#verify'
-      },
-      accounts: {
-        closePromo: '.intercom-note-close',
-        cc: 'CreditCardDetailsView',
-        getSelectorForAccount (accountType) {
-          return `.transactions-panel .${accountType}`
-        }
-      },
-      export: {
-        link: 'button.js-export',
-        selectFormatOpen: 'input#ComboboxInput-export-format',
-        selectFormatCSV: 'a[href=\\#CSV]',
-        startDateField: 'input#fromDate',
-        endDateField: 'input#toDate',
-        exportButton: 'button.js-submit'
-      },
-      logout: {
-        menu: 'button.MenuButton',
-        logoutButton: 'button.js-main-menu-logout'
-      }
-    }
   }
 
   async login (page) {

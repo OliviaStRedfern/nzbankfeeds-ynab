@@ -55,11 +55,8 @@ class YNABFlow extends AbstractFlow {
       throw new ClassInitializationError()
     }
     super(SECRETS, SELECTORS, URLS.login, URLS.home)
+    this.logColor = 'yellow'
     this.log('YNABFlow object created')
-  }
-
-  log (message) {
-    console.log(message.dim)
   }
 
   async getMostRecentTransactionMoment (page, ynabAccount) {

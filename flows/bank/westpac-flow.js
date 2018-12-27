@@ -1,36 +1,42 @@
 const { prompt, overwriteDateField } = require('../../utils/helpers')
-const AbstractBankFlow = require('./abstract-bank-flow')
+const AbstractBankFlow = require('../abstract/abstract-bank-flow')
 const csvConvert = require('../../convertCSV/westpac2ynab')
 const { ynabAccounts } = require('../ynab/ynab-flow')
+const { ClassInitializationError } = require('../../utils/error-classes')
+
+const URL = 'https://bank.westpac.co.nz/one/app.html#accounts'
+const SELECTORS = {
+  login: {
+    userIDField: '#login-username',
+    passwordField: '#login-password',
+    loginButton: '#action-login'
+  },
+  accounts: {
+    everyday: '1',
+    cc: '2',
+    getSelectorForAccount (accountType) {
+      return `#accounts-list li:nth-child(${accountType}) a`
+    }
+  },
+  export: {
+    link: 'a.action-export',
+    continue: '#download-transaction-dialog > div > h2',
+    startDateField: '.from-datepicker-region input',
+    endDateField: '.to-datepicker-region input',
+    exportButton: '#action-export'
+  }
+}
 class WestpacFlow extends AbstractBankFlow {
-  constructor (secrets) {
-    super()
+  constructor (SECRETS) {
+    if (!SECRETS) {
+      throw new ClassInitializationError()
+    }
+
+    super(SECRETS, SELECTORS, URL, URL)
+
     this.log('WestpacFlow object created')
     this.ynabAccount = ynabAccounts.Westpac
     this.csvConvert = csvConvert
-    this.SECRETS = secrets
-    this.URL = 'https://bank.westpac.co.nz/one/app.html#accounts'
-    this.SELECTORS = {
-      login: {
-        userIDField: '#login-username',
-        passwordField: '#login-password',
-        loginButton: '#action-login'
-      },
-      accounts: {
-        everyday: '1',
-        cc: '2',
-        getSelectorForAccount (accountType) {
-          return `#accounts-list li:nth-child(${accountType}) a`
-        }
-      },
-      export: {
-        link: 'a.action-export',
-        continue: '#download-transaction-dialog > div > h2',
-        startDateField: '.from-datepicker-region input',
-        endDateField: '.to-datepicker-region input',
-        exportButton: '#action-export'
-      }
-    }
   }
 
   async login (page) {

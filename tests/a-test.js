@@ -1,6 +1,6 @@
 const { expect } = require('./helpers/setup-chai')
 
-describe('testing framework is working', () => {
+describe('Testing framework', () => {
   it('works', () => {
     expect(true).to.equal(true)
   })

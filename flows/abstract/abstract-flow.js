@@ -14,10 +14,19 @@ class AbstractFlow {
 
     this.urlLogin = urlLogin
     this.urlHome = urlHome
+
+    this.debugLevel = 0
+    // debug level 1 & 2
+    this.logColor = 'magenta'
+    // debug level 2
+    this.infoColor = 'blue'
   }
 
   log (message) {
-    console.log(message.magenta)
+    if (this.debugLevel > 0) console.log(message[this.logColor])
+  }
+  info (message) {
+    if (this.debugLevel > 1) console.log(message[this.infoColor])
   }
 
   async authenticate (page) {
@@ -34,12 +43,12 @@ class AbstractFlow {
   }
 
   async __login (page, userID, password, loginSelectors) {
-    this.log('invoked AbstractFlow::login')
+    this.info('invoked AbstractFlow::login')
     if (!userID) {
-      console.error(`    No userID supplied, could not login`)
+      this.log(`    No userID supplied, could not login`)
       return false
     }
-    console.log(`    logging in user ${userID}`)
+    this.info(`    logging in user ${userID}`)
 
     await page.goto(this.urlLogin)
 

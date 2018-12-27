@@ -1,50 +1,55 @@
 const { prompt, overwriteDateField } = require('../../utils/helpers')
-const AbstractBankFlow = require('./abstract-bank-flow')
+const AbstractBankFlow = require('../abstract/abstract-bank-flow')
 const csvConvert = require('../../convertCSV/kiwibank2ynab')
 const { ynabAccounts } = require('../ynab/ynab-flow')
+const { ClassInitializationError } = require('../../utils/error-classes')
 
 // <div class="question">The name of my first pet?</div>
 // kbf.enhanced_security.esKeyboardInput("b");
 // #answer .qa .ex ~.ex .ex .ex ~.ex
 
+const URL = 'https://www.ib.kiwibank.co.nz/accounts/'
+const SELECTORS = {
+  login: {
+    userIDField: '#ctl00_c_txtUserName',
+    passwordField: '#ctl00_c_txtPassword',
+    loginButton: '.submit_button input'
+  },
+  onlineCode: {
+    onlineCodeField: '#online-code',
+    verifyButton: '#verify'
+  },
+  accounts: {
+    'freeUp': '1',
+    'cc': '4',
+    getSelectorForAccount (accountType) {
+      return `#account_list tr:nth-child(${accountType}) td.account_title a`
+    }
+  },
+  export: {
+    link: 'a.advanced.open',
+    selectFormatOpen: '#ctl00_c_TransactionSearchControl_ExportFormats_List',
+    selectFormatCSV: 'CSV-Extended',
+    startDateField: '#ctl00_c_TransactionSearchControl_DualDateSelector_initialDate_TextBox',
+    endDateField: '#ctl00_c_TransactionSearchControl_DualDateSelector_finalDate_TextBox',
+    exportButton: '#ctl00_c_TransactionSearchControl_ActionButton'
+  },
+  logout: {
+    menu: 'button.MenuButton',
+    logoutButton: 'button.js-main-menu-logout'
+  }
+}
+
 class KiwibankFlow extends AbstractBankFlow {
-  constructor (secrets) {
-    super()
+  constructor (SECRETS) {
+    if (!SECRETS) {
+      throw new ClassInitializationError()
+    }
+
+    super(SECRETS, SELECTORS, URL, URL)
     this.log('KiwibankFlow object created')
     this.ynabAccount = ynabAccounts.Kiwibank
     this.csvConvert = csvConvert
-    this.SECRETS = secrets
-    this.URL = 'https://www.ib.kiwibank.co.nz/accounts/'
-    this.SELECTORS = {
-      login: {
-        userIDField: '#ctl00_c_txtUserName',
-        passwordField: '#ctl00_c_txtPassword',
-        loginButton: '.submit_button input'
-      },
-      onlineCode: {
-        onlineCodeField: '#online-code',
-        verifyButton: '#verify'
-      },
-      accounts: {
-        'freeUp': '1',
-        'cc': '4',
-        getSelectorForAccount (accountType) {
-          return `#account_list tr:nth-child(${accountType}) td.account_title a`
-        }
-      },
-      export: {
-        link: 'a.advanced.open',
-        selectFormatOpen: '#ctl00_c_TransactionSearchControl_ExportFormats_List',
-        selectFormatCSV: 'CSV-Extended',
-        startDateField: '#ctl00_c_TransactionSearchControl_DualDateSelector_initialDate_TextBox',
-        endDateField: '#ctl00_c_TransactionSearchControl_DualDateSelector_finalDate_TextBox',
-        exportButton: '#ctl00_c_TransactionSearchControl_ActionButton'
-      },
-      logout: {
-        menu: 'button.MenuButton',
-        logoutButton: 'button.js-main-menu-logout'
-      }
-    }
   }
 
   async login (page) {

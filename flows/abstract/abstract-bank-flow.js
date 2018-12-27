@@ -10,6 +10,7 @@ class AbstractBankFlow extends AbstractFlow {
       throw new ClassInitializationError()
     }
     super(SECRETS, SELECTORS, urlLogin, urlHome)
+    this.logColor = 'green'
 
     this.log('AbstractBankFlow object created')
 
