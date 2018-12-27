@@ -55,8 +55,7 @@ function getFlow (flowName) {
     const flow = require(`./ynab/ynab-flow`)
     FlowClass = flow.YNABFlow
   } else {
-    const flow = require(`./bank/${flowName}`)
-    FlowClass = flow
+    FlowClass = require(`./bank/${flowName}`)
   }
   const secrets = getSecrets(FlowClass.name)
   return new FlowClass(secrets)

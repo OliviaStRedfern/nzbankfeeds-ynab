@@ -29,7 +29,6 @@ async function uploadTransactions (context, fileName) {
 }
 
 async function main () {
-  console.log('Main()')
   const flows = [
     'anz-flow'
     // 'bnz-flow',
