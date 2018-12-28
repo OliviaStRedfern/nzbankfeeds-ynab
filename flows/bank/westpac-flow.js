@@ -4,7 +4,7 @@ const csvConvert = require('../../convertCSV/westpac2ynab')
 const { ynabAccounts } = require('../ynab/ynab-flow')
 const { ClassInitializationError } = require('../../utils/error-classes')
 
-const URL = 'https://bank.westpac.co.nz/one/app.html#accounts'
+const URL = 'https://bank.westpac.co.nz/wone/app.html#accounts'
 const SELECTORS = {
   login: {
     userIDField: '#login-username',
