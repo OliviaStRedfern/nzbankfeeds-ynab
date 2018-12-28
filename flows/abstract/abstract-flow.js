@@ -51,6 +51,7 @@ class AbstractFlow {
     this.info(`    logging in user ${userID}`)
 
     await page.goto(this.urlLogin)
+    await page.waitForSelector(loginSelectors.userIDField)
 
     await page.click(loginSelectors.userIDField)
     await page.keyboard.type(userID)
