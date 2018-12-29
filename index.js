@@ -33,9 +33,9 @@ async function main () {
     // 'anz-flow',
     'bnz-flow',
     'kiwibank-cc-flow',
-    // 'kiwibank-flow',
+    'kiwibank-flow',
     // 'westpac-flow',
-    // 'westpac-cc-flow'
+    // 'westpac-cc-flow',
   ]
 
   let bank

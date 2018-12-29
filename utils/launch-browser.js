@@ -1,13 +1,13 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer')
 
-async function launchBrowser(slow = 1) {
-    console.log(`Launching browser instance`);
+async function launchBrowser (slow = 1) {
+  console.log(`Launching browser instance`)
 
-    const browser = await puppeteer.launch({
-        headless: false,
-        slowMo: slow,
-    });
-    const page = await browser.newPage();
-    return {browser, page};
+  const browser = await puppeteer.launch({
+    headless: false,
+    slowMo: slow,
+  })
+  const page = await browser.newPage()
+  return { browser, page }
 }
-module.exports = launchBrowser;
+module.exports = launchBrowser

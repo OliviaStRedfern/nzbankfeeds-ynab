@@ -18,7 +18,7 @@ function getSecrets (flowName) {
       console.log(`Will create new ${secretsFile} for credential storage in plain text`)
       secrets = {
         check: cryptr.encrypt(check),
-        flowName: undefined
+        flowName: undefined,
       }
     } else {
       throw (e)
@@ -35,7 +35,7 @@ function getSecrets (flowName) {
   const encryptedSecrets = secrets[flowName]
   return {
     userID: cryptr.decrypt(encryptedSecrets.userID),
-    password: cryptr.decrypt(encryptedSecrets.password)
+    password: cryptr.decrypt(encryptedSecrets.password),
   }
 }
 
@@ -45,7 +45,7 @@ function requestSecretsFromUser (flowName) {
 
   return {
     userID: cryptr.encrypt(userID),
-    password: cryptr.encrypt(password)
+    password: cryptr.encrypt(password),
   }
 }
 
