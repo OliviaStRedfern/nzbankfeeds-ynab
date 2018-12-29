@@ -62,12 +62,12 @@ class YNABFlow extends AbstractFlow {
   async getMostRecentTransactionMoment (page, ynabAccount) {
     this.log('invoked YNABFlow::getMostRecentTransactionDate')
 
-    if (!await this.authenticate(page)) {
-      return false
-    }
+    await this.authenticate(page)
 
     await page.waitForSelector(ynabAccount.selector)
     await page.click(ynabAccount.selector)
+
+    await page.waitForSelector(SELECTORS.import.resetFilters)
 
     const resetButton = await page.$$(SELECTORS.import.resetFilters)
     if (resetButton.length === 1) {
