@@ -31,11 +31,11 @@ async function uploadTransactions (context, fileName) {
 async function main () {
   const flows = [
     // 'anz-flow',
-    'bnz-flow',
-    'kiwibank-cc-flow',
-    'kiwibank-flow',
-    // 'westpac-flow',
-    // 'westpac-cc-flow',
+    // 'bnz-flow',
+    // 'kiwibank-cc-flow',
+    // 'kiwibank-flow',
+    'westpac-flow',
+    'westpac-cc-flow',
   ]
 
   let bank

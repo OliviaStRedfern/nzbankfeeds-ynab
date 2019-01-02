@@ -5,6 +5,8 @@ const { ynabAccounts } = require('../ynab/ynab-flow')
 class KiwibankCCFlow extends KiwibankFlow {
   constructor (secrets) {
     super(secrets)
+    this.__filename = __filename
+
     this.log('KiwibankFlowCC object created')
     this.csvConvert = csvConvert
     this.ynabAccount = ynabAccounts.KiwibankCC

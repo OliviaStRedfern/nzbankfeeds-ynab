@@ -5,6 +5,8 @@ const { ynabAccounts } = require('../ynab/ynab-flow')
 class WestpacFlowCC extends WestpacFlow {
   constructor (secrets) {
     super(secrets)
+    this.__filename = __filename
+
     this.log('WestpacFlow object created')
     this.ynabAccount = ynabAccounts.WestpacCC
     this.csvConvert = csvConvert

@@ -10,7 +10,7 @@ class AbstractBankFlow extends AbstractFlow {
       throw new ClassInitializationError()
     }
     super(SECRETS, SELECTORS, urlLogin, urlHome)
-    this.logColor = 'green'
+    this.logColor = 'cyan'
 
     this.log('AbstractBankFlow object created')
 
@@ -18,6 +18,7 @@ class AbstractBankFlow extends AbstractFlow {
     this.fs = fs
     this.isCSV = isCSV
     this.CSV_FOLDER_PATH = CSV_FOLDER_PATH
+    this.__filename = __filename
 
     // Must be overridden
     this.ynabAccount = undefined
@@ -55,6 +56,7 @@ class AbstractBankFlow extends AbstractFlow {
   }
 
   async getCSV (page, startMoment, endMoment) {
+    this.log(`invoked AbstractBankFlow::getCSV with startMoment:${startMoment} and endMoment:${endMoment}`)
     await this.authenticate(page)
     await this.navigateToExportTransactions(page)
     return this.downloadTransactions(page, startMoment, endMoment)

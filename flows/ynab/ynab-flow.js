@@ -55,6 +55,8 @@ class YNABFlow extends AbstractFlow {
       throw new ClassInitializationError()
     }
     super(SECRETS, SELECTORS, URLS.login, URLS.home)
+    this.__filename = __filename
+
     this.logColor = 'yellow'
     this.log('YNABFlow object created')
   }
@@ -76,16 +78,16 @@ class YNABFlow extends AbstractFlow {
 
     const transactionDateElements = await page.$$(SELECTORS.import.transactionDates)
     if (transactionDateElements.length === 0) {
-      console.log(`    YNAB is already up to date`.green)
+      this.log(`    YNAB is already up to date`.green)
       return null
     }
-    const mostRecentTransactionUSDate = await page.evaluate(
+    const mostRecentTransactionDate = await page.evaluate(
       el => el.innerText.trim(), transactionDateElements[0]
     )
 
-    console.log(`    found YNAB most recent transaction date ${mostRecentTransactionUSDate}`.green)
+    this.log(`    found YNAB most recent transaction date ${mostRecentTransactionDate}`.green)
 
-    const mostRecentTransactionMoment = moment(mostRecentTransactionUSDate, 'MM-DD-YYYY')
+    const mostRecentTransactionMoment = moment(mostRecentTransactionDate, 'DD-MM-YYYY')
 
     return mostRecentTransactionMoment
   }

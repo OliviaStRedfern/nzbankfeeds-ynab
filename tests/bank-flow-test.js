@@ -44,8 +44,15 @@ for (let i = 0; i < flowRequires.length; i++) {
         assert.hasAllDeepKeys(flow.ynabAccount, YNAB_ACCOUNT_SELECTOR)
         assert.isFunction(flow.csvConvert)
       })
-    })
+      it('reports the correct filename', () => {
+        // act
+        const flow = new FlowClass(SECRETS)
 
+        const reportedFilename = flow.__filename.split("/").pop()
+        const expectedFilename = `${flowRequires[i]}.js`
+        expect(reportedFilename).to.equal(expectedFilename)
+      })
+    })
     describe('Implementation', () => {
       afterEach(() => {
         sinon.restore()

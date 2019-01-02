@@ -38,6 +38,7 @@ class ANZFlow extends AbstractBankFlow {
     }
 
     super(SECRETS, SELECTORS, URL, URL)
+    this.__filename = __filename
 
     this.log('ANZFlow object created')
     this.ynabAccount = ynabAccounts.ANZ

@@ -21,6 +21,7 @@
     "puppeteer": "^1.7.0",
     "readline-sync": "^1.4.9",
     "requirejs": "^2.3.6",
+    "sqlite": "^3.0.0",
     "tesseract.js": "^1.0.10"
   },
   "devDependencies": {

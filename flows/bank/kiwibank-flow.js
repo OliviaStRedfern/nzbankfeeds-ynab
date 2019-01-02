@@ -47,6 +47,8 @@ class KiwibankFlow extends AbstractBankFlow {
     }
 
     super(SECRETS, SELECTORS, URL, URL)
+    this.__filename = __filename
+
     this.log('KiwibankFlow object created')
     this.ynabAccount = ynabAccounts.Kiwibank
     this.csvConvert = csvConvert

@@ -33,6 +33,7 @@ class WestpacFlow extends AbstractBankFlow {
     }
 
     super(SECRETS, SELECTORS, URL, URL)
+    this.__filename = __filename
 
     this.log('WestpacFlow object created')
     this.ynabAccount = ynabAccounts.Westpac

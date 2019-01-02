@@ -44,6 +44,8 @@ class BNZFlow extends AbstractBankFlow {
     }
 
     super(SECRETS, SELECTORS, URL, HOME)
+    this.__filename = __filename
+
     this.log('BNZFlow object created')
     this.ynabAccount = ynabAccounts.BNZ
     this.csvConvert = csvConvert
@@ -74,7 +76,7 @@ class BNZFlow extends AbstractBankFlow {
   }
 
   async downloadTransactions (page, startMoment, endMoment) {
-    this.log(`invoked BNZFlow::downloadTransactions`)
+    this.log(`invoked BNZFlow::downloadTransactions with startMoment:${startMoment} and endMoment:${endMoment}`)
 
     await this.fillDateField(page, this.SELECTORS.export.startDateField, startMoment)
     await this.fillDateField(page, this.SELECTORS.export.endDateField, endMoment)
@@ -83,7 +85,7 @@ class BNZFlow extends AbstractBankFlow {
   }
 
   async fillDateField (page, selector, mmmoment) {
-    this.log('invoked BNZFlow::fillDateField')
+    this.log(`invoked BNZFlow::fillDateField with selector:${selector} and mmmoment:${mmmoment}`)
 
     // BNZ date selectors barf if today is selected, "dates must be in the past"
     const todayMoment = moment()
