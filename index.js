@@ -1,33 +1,56 @@
-// const ANZFlow = require("./flows/anz-flow");
-// const BNZFlow = require("./flows/bnz-flow");
-// const KiwibankCCFlow = require("./flows/kiwibank-cc-flow");
-// const KiwibankFlow = require("./flows/kiwibank-flow");
-// const WestpacFlow = require("./flows/westpac-flow");
-// const WestpacCCFlow = require("./flows/westpac-cc-flow");
-// const { YNABFlow } = require("./flows/ynab-flow");
-const moment = require("moment");
-const launchBrowser = require("./utils/launch-browser");
-const getFlow = require("./flows/flow-factory");
+const moment = require('moment')
+const launchBrowser = require('./utils/launch-browser')
+const getFlow = require('./flows/flow-factory')
 
-async function main(bankFlow) {
-    const ynab = getFlow("ynab-flow");
-    const bank = getFlow(bankFlow);
-
-    const pageBank = await launchBrowser();
-    const pageYNAB = await launchBrowser();
-
-    const todayMoment = moment();
-    const mostRecentTransactionMoment =
-        await ynab.getMostRecentTransactionMoment(pageYNAB, bank.ynabAccount);
-    const fileName = await bank.getCSV(pageBank, mostRecentTransactionMoment, todayMoment);
-    const ynabCSV = await bank.csvConvert(fileName);
-    await bank.logout(pageBank);
-
-    await ynab.gotoHome(pageYNAB);
-    await ynab.uploadCSV(pageYNAB, bank.ynabAccount, ynabCSV);
+async function run (context) {
+  const { bank, ynab, pageBank, pageYNAB } = context
+  const mostRecentTransactionMoment =
+        await ynab.getMostRecentTransactionMoment(pageYNAB, bank.ynabAccount)
+  if (mostRecentTransactionMoment !== null) {
+    await downloadTransactions(context, mostRecentTransactionMoment)
+  }
+  await bank.logout(pageBank)
 }
 
-main("anz-flow");
+async function downloadTransactions (context, mostRecentTransactionMoment) {
+  const { bank, pageBank } = context
+  const todayMoment = moment()
+  const fileName = await bank.getCSV(pageBank, mostRecentTransactionMoment, todayMoment)
+  // if (fileName) {
+  await uploadTransactions(context, fileName)
+  // }
+}
 
+async function uploadTransactions (context, fileName) {
+  const { bank, ynab, pageYNAB } = context
+  const ynabCSV = await bank.csvConvert(fileName)
+  await ynab.gotoHome(pageYNAB)
+  await ynab.uploadCSV(pageYNAB, bank.ynabAccount, ynabCSV)
+}
 
+async function main () {
+  const flows = [
+    // 'anz-flow',
+    // 'bnz-flow',
+    // 'kiwibank-cc-flow',
+    // 'kiwibank-flow',
+    'westpac-flow',
+    'westpac-cc-flow',
+  ]
 
+  let bank
+  let pageBank
+  const ynab = getFlow('ynab-flow')
+  const webYNAB = await launchBrowser()
+  const pageYNAB = webYNAB.page
+  const context = { bank, ynab, pageBank, pageYNAB }
+  for (let i = 0; i < flows.length; i++) {
+    context.bank = getFlow(flows[i])
+    let webBank = await launchBrowser()
+    context.pageBank = webBank.page
+    await run(context)
+    await webBank.browser.close()
+  }
+}
+
+main()

@@ -4,24 +4,40 @@
   "description": "Automation for YNAB",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/qunit/bin/qunit 'tests/*-test.js'"
+    "test": "mocha 'tests/**/*-test.js'"
   },
   "author": "Conrad Johnston",
   "license": "ISC",
   "dependencies": {
+    "chai": "^4.2.0",
     "colors": "^1.3.2",
+    "cryptr": "^4.0.0",
     "csv": "^3.1.0",
     "fs": "0.0.1-security",
     "jsonfile": "^5.0.0",
+    "mocha": "^5.2.0",
     "moment": "^2.22.2",
-    "node-qunit": "^1.0.0",
     "osa-imessage": "^2.4.2",
     "puppeteer": "^1.7.0",
     "readline-sync": "^1.4.9",
     "requirejs": "^2.3.6",
+    "sqlite": "^3.0.0",
     "tesseract.js": "^1.0.10"
   },
   "devDependencies": {
-    "qunit": "^2.6.2"
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^5.9.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-chai-expect": "^2.0.1",
+    "eslint-plugin-chai-friendly": "^0.4.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-mocha": "^5.2.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "mock-fs": "^4.7.0",
+    "qunit": "^2.6.2",
+    "sinon": "^7.1.1",
+    "sinon-chai": "^3.2.0"
   }
 }
