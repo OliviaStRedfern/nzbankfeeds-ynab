@@ -28,15 +28,15 @@ const ynabAccounts = {
 }
 
 const URLS = {
-  login: 'https://app.youneedabudget.com/users/login',
+  login: 'https://app.youneedabudget.com/users/authentication',
   home: 'https://app.youneedabudget.com',
 }
 
 const SELECTORS = {
   login: {
-    userIDField: '#login-username',
-    passwordField: '#login-password',
-    loginButton: 'button[type=submit]',
+    userIDField: '#request_data_email',
+    passwordField: '#request_data_password',
+    loginButton: '#login',
   },
   import: {
     transactionDates: '.content .ynab-grid-body-row:not(.is-scheduled):not(.needs-approved) .ynab-grid-cell-date',
@@ -69,12 +69,12 @@ class YNABFlow extends AbstractFlow {
     await page.waitForSelector(ynabAccount.selector)
     await page.click(ynabAccount.selector)
 
-    await page.waitForSelector(SELECTORS.import.resetFilters)
+    // await page.waitForSelector(SELECTORS.import.resetFilters)
 
-    const resetButton = await page.$$(SELECTORS.import.resetFilters)
-    if (resetButton.length === 1) {
-      await page.click(SELECTORS.import.resetFilters)
-    }
+    // const resetButton = await page.$$(SELECTORS.import.resetFilters)
+    // if (resetButton.length === 1) {
+    //   await page.click(SELECTORS.import.resetFilters)
+    // }
 
     const transactionDateElements = await page.$$(SELECTORS.import.transactionDates)
     if (transactionDateElements.length === 0) {
