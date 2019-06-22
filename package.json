@@ -4,6 +4,7 @@
   "description": "Automation for YNAB",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "mocha 'tests/**/*-test.js'"
   },
   "author": "Conrad Johnston",
