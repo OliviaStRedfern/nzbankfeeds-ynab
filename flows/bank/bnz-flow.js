@@ -26,8 +26,8 @@ const SELECTORS = {
   },
   export: {
     link: 'button.js-export',
-    selectFormatOpen: 'input#ComboboxInput-export-format',
-    selectFormatCSV: 'a[href=\\#CSV]',
+    selectFormatOpen: 'select[name=format]',
+    selectFormatCSV: 'option[value=CSV]',
     startDateField: 'input#fromDate',
     endDateField: 'input#toDate',
     exportButton: 'button.js-submit',
