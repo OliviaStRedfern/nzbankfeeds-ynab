@@ -21,7 +21,9 @@ It's licenced under the MIT licence so you can go crazy with forks for your proj
 
 This project is all about working software, with a road map for improvements. Because I am using it right now for my own finances.
 
-For example, although it would be better to interface directly with the YNAP API to do the transaction import, it was quicker just to use Puppeteer to interact directly with the website. This meant I could create and end-to-end flow quickly, with a view to iterating improvements accorning to the road map.
+For example, although it would be better to interface directly with the YNAP API to do the transaction import, it was quicker just to use Puppeteer to interact directly with the YNAB website. This meant I could create and end-to-end flow quickly, with a view to iterating improvements accorning to the road map.
+
+Robust testing is important so that changes don't introduce regressions. 
 
 ## Architecture
 
@@ -34,6 +36,14 @@ The main concept to understand this codebase is the `flow` which in this context
         * `bank\<bankname>-flow`
     * `ynab-flow`
 
+Each flow encapsulates the HTML selectors and UI actions needed to complete a given task. 
+
+The abstract flow represents the selectors and actions to login to a website.
+
+The abstract bank flow represents the methods common to banks for logging in, retrieving a list of transactoions in CSV format for a given date range. Each bank's unique UI and actions are implements in their repective classes. There are two examples of `-cc` accounts, which are credit card account who inherit everything from the bank, but have different account selectors.
+
+The YNAB flow represents logging into YNAB and getting the most recent transaction date for an account, and then another set of methods for uploading the CSV data from a bank.
+
 ## Roadmap
 
 1. Documentation
@@ -42,6 +52,7 @@ The main concept to understand this codebase is the `flow` which in this context
 1. Create a UI
 1. Re-write the CSV importer, there's a lot of room for refactoring in that code
 1. Convert to typescript
+1. Optimise the flows for `-cc` accounts so they re-use an existing session
 
 ### The fine print
 You need to check with your bank or financial instution before running this code. I don't know what their attitude to this method of integration is. I also suggest you have 2FA set up for your account, this means that the script needs you to enter you 2FA credential each time it is run, which I argue means this isn't truely automation.
