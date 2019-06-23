@@ -6,24 +6,20 @@ describe('YNABFlow', () => {
   describe('Constructor', () => {
     it('instantiates', () => {
       // act
-      const flow = new YNABFlow(SECRETS)
+      const flow = new YNABFlow()
 
       // assert
       expect(flow instanceof YNABFlow).to.be.true
     })
-    it('does not allow instantiation without valid parameters', () => {
-      // assert
-      expect(() => new YNABFlow()).to.throw('ClassInitializationError')
-      expect(() => new YNABFlow(null)).to.throw('ClassInitializationError')
-    })
   })
   describe('Data Structures', () => {
-    it('has correct selectors', () => {
-      // act
-      const flow = new YNABFlow(SECRETS)
-
-      // assert
-      assert.deepEqual(Object.keys(flow.SELECTORS.login), Object.keys(SELECTORS.login))
+    it.skip('gets the budget ID', () => {
+    })
+    it.skip('gets a list of account IDs', () => {
+    })
+    it.skip('gets the most recent transaction for an IDs', () => {
+    })
+    it.skip('imports a list of transactions for an ID', () => {
     })
   })
 })

@@ -1,11 +1,14 @@
 require('colors')
 const { ClassInitializationError } = require('../../utils/error-classes')
+const AbstractLogger = require('./abstract-logger')
 
-class AbstractFlow {
+class AbstractFlow extends AbstractLogger {
   constructor (SECRETS, SELECTORS, urlLogin, urlHome) {
     if (!SECRETS || !SELECTORS || !urlLogin || !urlHome) {
       throw new ClassInitializationError()
     }
+    super()
+
     this.log('AbstractFlow object created')
 
     this.SECRETS = SECRETS
@@ -14,24 +17,6 @@ class AbstractFlow {
 
     this.urlLogin = urlLogin
     this.urlHome = urlHome
-    this.__filename = __filename
-
-    this.debugLevel = 2
-    // debug level 1 & 2
-    this.logColor = 'magenta'
-    // debug level 2
-    this.infoColor = 'blue'
-  }
-
-  log (message) {
-    if (this.debugLevel > 0) this.__print(message, this.logColor)
-  }
-  info (message) {
-    if (this.debugLevel > 1) this.__print(message, this.infoColor)
-  }
-  __print (message, color) {
-    const caller = `<${this.constructor.name}>`
-    console.log(`${caller.dim} ${message[color]} ${this.__filename.dim}`)
   }
 
   async authenticate (page) {
