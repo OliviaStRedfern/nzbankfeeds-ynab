@@ -1,6 +1,7 @@
 const moment = require('moment')
 const launchBrowser = require('./utils/launch-browser')
 const getFlow = require('./flows/flow-factory')
+require('dotenv').config()
 
 async function run (context) {
   const { bank, ynab, pageBank, pageYNAB } = context

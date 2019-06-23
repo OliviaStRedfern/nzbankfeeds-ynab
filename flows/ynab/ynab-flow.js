@@ -1,95 +1,74 @@
 require('colors')
-const AbstractFlow = require('../abstract/abstract-flow')
+const _ = require('lodash')
+const AbstractLogger = require('../abstract/abstract-logger')
 const moment = require('moment')
 const { prompt } = require('../../utils/helpers')
-const { ClassInitializationError } = require('../../utils/error-classes')
+const ynab = require('ynab')
+const budgetName = 'My Budget'
 
 const Kiwibank = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(1)',
+  name: 'Kiwibank Current',
 }
 const Westpac = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(2)',
+  name: 'Westapac Current',
 }
 const BNZ = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(3)',
+  name: 'BNZ VISA',
 }
 const WestpacCC = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(4)',
+  name: 'Westapac Mastercard',
 }
 const KiwibankCC = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(5)',
+  name: 'Kiwibank CC',
 }
 const ANZ = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(7)',
+  name: 'ANZ Current 00',
 }
 
 const ynabAccounts = {
   ANZ, BNZ, Kiwibank, KiwibankCC, Westpac, WestpacCC,
 }
 
-const URLS = {
-  login: 'https://app.youneedabudget.com/users/authentication',
-  home: 'https://app.youneedabudget.com',
-}
-
-const SELECTORS = {
-  login: {
-    userIDField: '#request_data_email',
-    passwordField: '#request_data_password',
-    loginButton: '#login',
-  },
-  import: {
-    transactionDates: '.content .ynab-grid-body-row:not(.is-scheduled):not(.needs-approved) .ynab-grid-cell-date',
-    startImportButton: 'button.accounts-toolbar-file-import-transactions',
-    resetFilters: '[data-register-area=ResetFilters]',
-    animationDelay: 200,
-    choseImportFile: 'input[type=file]',
-    confirmImport: '.modal .button-primary',
-    ok: '.modal .button-primary',
-  },
-}
-
-class YNABFlow extends AbstractFlow {
-  constructor (SECRETS) {
-    if (!SECRETS) {
-      throw new ClassInitializationError()
+class YNABFlow extends AbstractLogger {
+  constructor (ynabAPI) {
+    super()
+    if (ynabAPI === undefined) {
+      this.ynabAPI = new ynab.API(process.env.YNAB_ACCESS_TOKEN)
+    } else {
+      this.ynabAPI = ynabAPI
     }
-    super(SECRETS, SELECTORS, URLS.login, URLS.home)
-    this.__filename = __filename
-
+    this.budgetName = budgetName
     this.logColor = 'yellow'
     this.log('YNABFlow object created')
   }
 
+  async getBudgetId () {
+    const budgets = await this.ynabAPI.budgets.getBudgets()
+    const budget = _.findLast(budgets.data.budgets, (b) => {
+      return b.name === this.budgetName
+    })
+    return budget.id
+  }
+
+  async getAccountId (budgetId, accountName) {
+    const accounts = await this.ynabAPI.accounts.getAccounts(budgetId)
+    const account = _.findLast(accounts.data.accounts, (a) => {
+      return a.name === accountName
+    })
+    return account.id
+  }
+
+  async getMostRecentTransaction (budgetId, accountId) {
+    const transactions = await this.ynabAPI.transactions.getTransactionsByAccount(budgetId, accountId)
+    return transactions.data.transactions[transactions.data.transactions.length - 1]
+  }
+
   async getMostRecentTransactionMoment (page, ynabAccount) {
-    this.log('invoked YNABFlow::getMostRecentTransactionDate')
+    const budgetId = await this.getBudgetId()
+    const accountId = await this.getAccountId(budgetId, ynabAccount.accountName)
+    const transaction = await this.getMostRecentTransaction(budgetId, accountId)
 
-    await this.authenticate(page)
-
-    await page.waitForSelector(ynabAccount.selector)
-    await page.click(ynabAccount.selector)
-
-    // await page.waitForSelector(SELECTORS.import.resetFilters)
-
-    // const resetButton = await page.$$(SELECTORS.import.resetFilters)
-    // if (resetButton.length === 1) {
-    //   await page.click(SELECTORS.import.resetFilters)
-    // }
-
-    const transactionDateElements = await page.$$(SELECTORS.import.transactionDates)
-    if (transactionDateElements.length === 0) {
-      this.log(`    YNAB is already up to date`.green)
-      return null
-    }
-    const mostRecentTransactionDate = await page.evaluate(
-      el => el.innerText.trim(), transactionDateElements[0]
-    )
-
-    this.log(`    found YNAB most recent transaction date ${mostRecentTransactionDate}`.green)
-
-    const mostRecentTransactionMoment = moment(mostRecentTransactionDate, 'DD-MM-YYYY')
-
-    return mostRecentTransactionMoment
+    return moment(transaction.date, 'YYYY-MM-DD')
   }
 
   async uploadCSV (page, ynabAccount, fileName) {
