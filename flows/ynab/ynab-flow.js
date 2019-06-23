@@ -4,9 +4,7 @@ const AbstractLogger = require('../abstract/abstract-logger')
 const moment = require('moment')
 const { prompt } = require('../../utils/helpers')
 const ynab = require('ynab')
-const ynabAPI = new ynab.API(process.env.YNAB_ACCESS_TOKEN)
 const budgetName = 'My Budget'
-const NOOP = () => { }
 
 const Kiwibank = {
   name: 'Kiwibank Current',
@@ -32,46 +30,45 @@ const ynabAccounts = {
 }
 
 class YNABFlow extends AbstractLogger {
-  constructor() {
+  constructor (ynabAPI) {
     super()
+    if (ynabAPI === undefined) {
+      this.ynabAPI = new ynab.API(process.env.YNAB_ACCESS_TOKEN)
+    } else {
+      this.ynabAPI = ynabAPI
+    }
+    this.budgetName = budgetName
     this.logColor = 'yellow'
     this.log('YNABFlow object created')
   }
 
+  async getBudgetId () {
+    const budgets = await this.ynabAPI.budgets.getBudgets()
+    const budget = _.findLast(budgets.data.budgets, (b) => {
+      return b.name === this.budgetName
+    })
+    return budget.id
+  }
+
+  async getAccountId (budgetId, accountName) {
+    const accounts = await this.ynabAPI.accounts.getAccounts(budgetId)
+    const account = _.findLast(accounts.data.accounts, (a) => {
+      return a.name === accountName
+    })
+    return account.id
+  }
+
+  async getMostRecentTransaction (budgetId, accountId) {
+    const transactions = await this.ynabAPI.transactions.getTransactionsByAccount(budgetId, accountId)
+    return transactions.data.transactions[transactions.data.transactions.length - 1]
+  }
+
   async getMostRecentTransactionMoment (page, ynabAccount) {
-    const budgetsResponse = await ynabAPI.budgets.getBudgets()
-    const budgetID = budgetsResponse.data.budgets[0].id
+    const budgetId = await this.getBudgetId()
+    const accountId = await this.getAccountId(budgetId, ynabAccount.accountName)
+    const transaction = await this.getMostRecentTransaction(budgetId, accountId)
 
-    this.log('invoked YNABFlow::getMostRecentTransactionDate')
-
-    // Assumes that our accounts are in the first budget returned by the API
-
-    // await this.authenticate(page)
-
-    // await page.waitForSelector(ynabAccount.selector)
-    // await page.click(ynabAccount.selector)
-
-    // // await page.waitForSelector(SELECTORS.import.resetFilters)
-
-    // // const resetButton = await page.$$(SELECTORS.import.resetFilters)
-    // // if (resetButton.length === 1) {
-    // //   await page.click(SELECTORS.import.resetFilters)
-    // // }
-
-    // const transactionDateElements = await page.$$(SELECTORS.import.transactionDates)
-    // if (transactionDateElements.length === 0) {
-    //   this.log(`    YNAB is already up to date`.green)
-    //   return null
-    // }
-    // const mostRecentTransactionDate = await page.evaluate(
-    //   el => el.innerText.trim(), transactionDateElements[0]
-    // )
-
-    // this.log(`    found YNAB most recent transaction date ${mostRecentTransactionDate}`.green)
-
-    // const mostRecentTransactionMoment = moment(mostRecentTransactionDate, 'DD-MM-YYYY')
-
-    // return mostRecentTransactionMoment
+    return moment(transaction.date, 'YYYY-MM-DD')
   }
 
   async uploadCSV (page, ynabAccount, fileName) {
