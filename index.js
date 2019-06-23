@@ -1,7 +1,8 @@
+require('dotenv').config()
 const moment = require('moment')
 const launchBrowser = require('./utils/launch-browser')
 const getFlow = require('./flows/flow-factory')
-require('dotenv').config()
+const NOOP = () => { }
 
 async function run (context) {
   const { bank, ynab, pageBank, pageYNAB } = context
@@ -25,7 +26,6 @@ async function downloadTransactions (context, mostRecentTransactionMoment) {
 async function uploadTransactions (context, fileName) {
   const { bank, ynab, pageYNAB } = context
   const ynabCSV = await bank.csvConvert(fileName)
-  await ynab.gotoHome(pageYNAB)
   await ynab.uploadCSV(pageYNAB, bank.ynabAccount, ynabCSV)
 }
 
@@ -42,9 +42,7 @@ async function main () {
   let bank
   let pageBank
   const ynab = getFlow('ynab-flow')
-  const webYNAB = await launchBrowser()
-  const pageYNAB = webYNAB.page
-  const context = { bank, ynab, pageBank, pageYNAB }
+  const context = { bank, ynab, pageBank, NOOP }
   for (let i = 0; i < flows.length; i++) {
     context.bank = getFlow(flows[i])
     let webBank = await launchBrowser()
