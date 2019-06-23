@@ -23,7 +23,7 @@
     "readline-sync": "^1.4.9",
     "requirejs": "^2.3.6",
     "sqlite": "^3.0.0",
-    "tesseract.js": "^1.0.19"
+    "ynab": "^1.12.0"
   },
   "devDependencies": {
     "chai-as-promised": "^7.1.1",
