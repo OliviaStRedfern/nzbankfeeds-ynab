@@ -3,24 +3,26 @@ const AbstractFlow = require('../abstract/abstract-flow')
 const moment = require('moment')
 const { prompt } = require('../../utils/helpers')
 const { ClassInitializationError } = require('../../utils/error-classes')
+const ynab = require('ynab')
+const ynabAPI = new ynab.API(process.env.YNAB_ACCESS_TOKEN)
 
 const Kiwibank = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(1)',
+  name: 'Kiwibank Current',
 }
 const Westpac = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(2)',
+  name: 'Westapac Current',
 }
 const BNZ = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(3)',
+  name: 'BNZ VISA',
 }
 const WestpacCC = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(4)',
+  name: 'Westapac Mastercard',
 }
 const KiwibankCC = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(5)',
+  name: 'Kiwibank CC',
 }
 const ANZ = {
-  selector: '.nav-accounts .nav-account.onBudget a.nav-account-row:nth-of-type(7)',
+  name: 'ANZ Current 00',
 }
 
 const ynabAccounts = {
