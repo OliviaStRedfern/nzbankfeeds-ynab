@@ -2,6 +2,8 @@ const jsonfile = require('jsonfile')
 const { prompt, secretPrompt } = require('../utils/helpers')
 const secretsFile = './secrets.json'
 const Cryptr = require('cryptr')
+const ynab = require('ynab')
+
 const check = 'little fluffy clouds'
 let cryptr = null
 
@@ -51,16 +53,16 @@ function requestSecretsFromUser (flowName) {
 
 function getFlow (flowName) {
   let FlowClass
-  let secrets
+  let arg
   if (flowName === 'ynab-flow') {
     const flow = require(`./ynab/ynab-flow`)
     FlowClass = flow.YNABFlow
-    // secrets is intentionally undefined in this case
+    arg = new ynab.API(process.env.YNAB_ACCESS_TOKEN)
   } else {
     FlowClass = require(`./bank/${flowName}`)
-    secrets = getSecrets(FlowClass.name)
+    arg = getSecrets(FlowClass.name)
   }
-  return new FlowClass(secrets)
+  return new FlowClass(arg)
 }
 
 module.exports = getFlow
