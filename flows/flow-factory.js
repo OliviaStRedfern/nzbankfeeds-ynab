@@ -51,13 +51,15 @@ function requestSecretsFromUser (flowName) {
 
 function getFlow (flowName) {
   let FlowClass
+  let secrets
   if (flowName === 'ynab-flow') {
     const flow = require(`./ynab/ynab-flow`)
     FlowClass = flow.YNABFlow
+    // secrets is intentionally undefined in this case
   } else {
     FlowClass = require(`./bank/${flowName}`)
+    secrets = getSecrets(FlowClass.name)
   }
-  const secrets = getSecrets(FlowClass.name)
   return new FlowClass(secrets)
 }
 
