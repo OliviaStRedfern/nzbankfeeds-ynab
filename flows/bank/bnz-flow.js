@@ -28,9 +28,9 @@ const SELECTORS = {
     link: 'button.js-export',
     selectFormatOpen: 'select[name=format]',
     selectFormatCSV: 'option[value=CSV]',
-    startDateField: 'input#fromDate',
-    endDateField: 'input#toDate',
-    exportButton: 'button.js-submit',
+    startDateField: 'input[name=fromDate]',
+    endDateField: 'input[name=toDate]',
+    exportButton: '.ReactModal__Content form button[class^=Button]:enabled',
   },
   logout: {
     menu: 'button.MenuButton',
@@ -71,8 +71,10 @@ class BNZFlow extends AbstractBankFlow {
     await page.click(this.SELECTORS.export.link)
 
     await page.waitForSelector(this.SELECTORS.export.selectFormatOpen)
-    await page.click(this.SELECTORS.export.selectFormatOpen)
-    await page.click(this.SELECTORS.export.selectFormatCSV)
+
+    // BNZ now defaults to CSV
+    // await page.click(this.SELECTORS.export.selectFormatOpen)
+    // await page.click(this.SELECTORS.export.selectFormatCSV)
   }
 
   async downloadTransactions (page, startMoment, endMoment) {
@@ -81,6 +83,7 @@ class BNZFlow extends AbstractBankFlow {
     await this.fillDateField(page, this.SELECTORS.export.startDateField, startMoment)
     await this.fillDateField(page, this.SELECTORS.export.endDateField, endMoment)
 
+    await page.waitForSelector(this.SELECTORS.export.exportButton)
     return super.downloadCSV(page, this.SELECTORS.export.exportButton)
   }
 

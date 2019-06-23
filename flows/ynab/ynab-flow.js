@@ -65,7 +65,7 @@ class YNABFlow extends AbstractLogger {
 
   async getMostRecentTransactionMoment (page, ynabAccount) {
     const budgetId = await this.getBudgetId()
-    const accountId = await this.getAccountId(budgetId, ynabAccount.accountName)
+    const accountId = await this.getAccountId(budgetId, ynabAccount.name)
     const transaction = await this.getMostRecentTransaction(budgetId, accountId)
 
     return moment(transaction.date, 'YYYY-MM-DD')
