@@ -19,7 +19,7 @@
     "jsonfile": "^5.0.0",
     "lodash": "^4.17.15",
     "mocha": "^5.2.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "osa-imessage": "^2.4.2",
     "puppeteer": "^1.18.0",
     "readline-sync": "^1.4.9",
